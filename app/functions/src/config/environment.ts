@@ -6,7 +6,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { Timestamp } from 'firebase-admin/firestore';
 import { deleteObject, ref as refStorage, getStorage, connectStorageEmulator } from 'firebase/storage';
-import serviceAccountData from '../../alce-importaciones-firebase-adminsdk-e1fl0-d6a55bc56a.json';
+import serviceAccountData from '../../adminsdk/alce-importaciones-firebase-adminsdk-e1fl0-d6a55bc56a.json';
 // import { IBillingData, IMenu, IOrder, IPaymentMethod, IProduct, IRestaurant, ITotalDB, IUser } from '../types';
 // import { COLLECTIONS } from '../utils';
 
