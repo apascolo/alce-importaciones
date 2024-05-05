@@ -10,3 +10,5 @@ node_modules/
 data/
 adminsdk/
 lib/
+
+firebase-*
