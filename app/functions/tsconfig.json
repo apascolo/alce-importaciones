@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
     "outDir": "lib",
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "es2017"
   },
   "compileOnSave": true,
-  "include": [
-    "src"
-  ]
+  "include": ["src", "src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
