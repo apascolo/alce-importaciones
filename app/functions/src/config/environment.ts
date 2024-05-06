@@ -29,6 +29,7 @@ const environment = {
     projectId: process.env.FB_PROJECTID,
     messagingSenderId: process.env.FB_MESSAGING_SENDERID,
     appId: process.env.FB_APPID,
+    locationId: process.env.FB_LOCATIONID,
     // measurementId: process.env.FB_MEASUREMENTID,
   },
   algolia: {

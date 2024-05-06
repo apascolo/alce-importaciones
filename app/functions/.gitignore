@@ -12,3 +12,5 @@ adminsdk/
 lib/
 
 firebase-*
+
+.env
