@@ -1,4 +1,4 @@
 export enum eEndpoints {
   Root = '/',
-  CreateUserAdminTest = '/admin/createUserAdminTest',
+  CreateUserAdmin = '/admin/createUserAdmin',
 }

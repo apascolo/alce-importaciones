@@ -34,10 +34,7 @@ export class LoginComponent implements OnInit {
   }
 
   public controlInvalid(control: string) {
-    return (
-      this.form.get(control)?.invalid &&
-      (this.form.get(control)?.dirty || this.form.get(control)?.touched)
-    );
+    return this.form.get(control)?.invalid && this.form.get(control)?.dirty;
   }
 
   private buildForm() {

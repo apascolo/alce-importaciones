@@ -5,7 +5,7 @@
     class="w-1/4 bg-slate-100 p-8 rounded-md shadow-md ring-1 ring-gray-200 mb-5"
   >
     <img
-      src="http://127.0.0.1:9199/v0/b/alce-importaciones.appspot.com/o/logo-alce-importaciones-horizontal.webp?alt=media&token=dca87266-9d70-4816-a095-77681d2441a5"
+      src="assets/images/logo-alce-importaciones-horizontal.webp"
       alt="logo alce importaciones"
       width="200px"
       class="m-auto mb-5"
@@ -21,46 +21,22 @@
       (keydown.enter)="handleSubmit()"
       class="mb-3"
     >
-      <label
-        for="email"
-        class="block text-sm font-medium leading-6 text-gray-900 mb-1"
-      >
-        Correo
-      </label>
-      <input
-        formControlName="email"
-        id="email"
-        name="email"
+      <app-text-field
+        [hasError]="controlInvalid('email')"
+        controlName="email"
+        label="Correo"
         type="email"
-        autocomplete="email"
         placeholder="micorreo@empresa.com"
-        class="block w-full rounded-md border-0 p-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6"
-        [ngClass]="controlInvalid('email') ? 'ring-rose-600' : ''"
       />
-      @if (controlInvalid('email')) {
-      <small class="text-rose-600 font-medium">Campo requerido</small>
-      }
 
-      <label
-        for="password"
-        class="block text-sm font-medium leading-6 text-gray-900 mb-1 mt-2"
-      >
-        Contraseña
-      </label>
-      <input
-        formControlName="password"
-        id="password"
-        name="password"
+      <app-text-field
+        [hasError]="controlInvalid('password')"
+        controlName="password"
+        label="Contraseña"
         type="password"
-        autocomplete="password"
         placeholder="6 - 12 caracteres"
         maxlength="12"
-        class="block w-full rounded-md border-0 p-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6"
-        [ngClass]="controlInvalid('password') ? 'ring-rose-600 mb-0' : 'mb-3'"
       />
-      @if (controlInvalid('password')) {
-      <small class="text-rose-600 font-medium">Campo requerido</small>
-      }
     </form>
 
     <app-button
