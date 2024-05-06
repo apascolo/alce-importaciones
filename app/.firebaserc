@@ -2,6 +2,13 @@
   "projects": {
     "default": "alce-importaciones"
   },
-  "targets": {},
-  "etags": {}
+  "targets": {
+    "alce-importaciones": {
+      "hosting": {
+        "app": [
+          "app-alce-importaciones"
+        ]
+      }
+    }
+  }
 }

@@ -1,0 +1,58 @@
+<div
+  class="flex items-center justify-center w-full h-full flex-col bg-gray-200"
+>
+  <div
+    class="w-1/4 bg-slate-100 p-8 rounded-md shadow-md ring-1 ring-gray-200 mb-5"
+  >
+    <img
+      src="assets/images/logo-alce-importaciones-horizontal.webp"
+      alt="logo alce importaciones"
+      width="200px"
+      class="m-auto mb-5"
+    />
+    <h1
+      class="block text-2xl text-gray-900 mb-6 w-full font-medium text-center"
+    >
+      Portal Administrativo
+    </h1>
+    <form
+      [formGroup]="form"
+      (submit)="handleSubmit()"
+      (keydown.enter)="handleSubmit()"
+      class="mb-3"
+    >
+      <app-text-field
+        [hasError]="controlInvalid('email')"
+        controlName="email"
+        label="Correo"
+        type="email"
+        placeholder="micorreo@empresa.com"
+        classes="mb-2"
+      />
+
+      <app-text-field
+        [hasError]="controlInvalid('password')"
+        controlName="password"
+        label="Contraseña"
+        type="password"
+        placeholder="6 - 12 caracteres"
+        maxlength="12"
+      />
+    </form>
+
+    <app-button
+      name="Ingresar"
+      (onSubmit)="handleSubmit()"
+      classes="mb-3"
+      [isLoading]="isLoading"
+    />
+
+    <a class="text-gray-900 hover:text-orange-600 font-medium">
+      ¿Olvidaste tu contraseña?
+    </a>
+  </div>
+
+  <p class="m-0 block w-full text-center text-gray-400">
+    &copy;{{ year }} - ALCE Importaciones
+  </p>
+</div>

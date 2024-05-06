@@ -1,10 +1,18 @@
 import { Request, Response } from 'express';
-import { admin } from '../../config/environment';
+import * as admin from 'firebase-admin';
 
-const createUserAdminTest = async (_req: Request, res: Response) => {
+const email = 'superuser@test-alce.com';
+
+const createUserAdmin = async (_req: Request, res: Response) => {
+  const user = await admin.auth().getUserByEmail(email);
+
+  if (user) {
+    return res.status(409).send('Lo siento, ya existe un usuario superadmin');
+  }
+
   try {
     const userCreated = await admin.auth().createUser({
-      email: 'superuser@test-alce.com',
+      email,
       emailVerified: true,
       password: 'password',
       displayName: 'Admin',
@@ -20,4 +28,4 @@ const createUserAdminTest = async (_req: Request, res: Response) => {
   }
 };
 
-export { createUserAdminTest };
+export { createUserAdmin };
