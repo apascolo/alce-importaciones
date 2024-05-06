@@ -1,17 +1,34 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
   inject,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ILoginControls } from '@interfaces/index';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { ButtonComponent } from '@components/button/button.component';
+import { TextFieldComponent } from '@components/text-field/text-field.component';
+import { eRoutes } from '@enums/index';
+import { ILogin, ILoginControls } from '@interfaces/index';
 import { AuthService } from '@services/auth.service';
-import { UserCredential } from 'firebase/auth';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    ButtonComponent,
+    TextFieldComponent,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.Default,
@@ -20,6 +37,7 @@ export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private message = inject(NzMessageService);
+  private router = inject(Router);
 
   public form: FormGroup<ILoginControls>;
   public isLoading = false;
@@ -55,12 +73,13 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) return;
 
     this.isLoading = true;
-    const { email, password } = this.form.value;
+    const { email, password } = this.form.value as ILogin;
 
     this.authService
       .login({ email, password })
-      .then((user: UserCredential) => {
+      .then(() => {
         this.isLoading = false;
+        this.router.navigateByUrl(eRoutes.Root);
       })
       .catch((err: any) => {
         this.message.error(err.message);

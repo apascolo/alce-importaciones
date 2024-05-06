@@ -1,11 +1,10 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { IUser } from '@interfaces/index';
+import { ILogin, IUser } from '@interfaces/index';
 import {
   Auth,
-  onAuthStateChanged,
-  getAuth,
   signOut,
   signInWithEmailAndPassword,
+  authState,
 } from '@angular/fire/auth';
 
 @Injectable({
@@ -14,18 +13,20 @@ import {
 export class AuthService {
   public user = signal<IUser | null>(null);
 
-  private _fireAuth = inject(Auth);
+  private auth: Auth = inject(Auth);
 
-  constructor() {
-    onAuthStateChanged(getAuth(), (user) => {
-      if (user === null) signOut(getAuth());
-    });
+  getAuthState() {
+    return authState(this.auth);
+  }
+  async getIdTokenResult() {
+    return await this.auth.currentUser?.getIdTokenResult();
   }
 
-  login({ email, password }: any) {
-    return signInWithEmailAndPassword(getAuth(), email, password);
+  login({ email, password }: ILogin) {
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
+
   logout() {
-    return signOut(getAuth());
+    return signOut(this.auth);
   }
 }

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,10 +6,12 @@ import {
   booleanAttribute,
   inject,
 } from '@angular/core';
-import { FormGroupDirective } from '@angular/forms';
+import { FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-text-field',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './text-field.component.html',
   styleUrl: './text-field.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

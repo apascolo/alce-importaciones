@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,6 +8,7 @@ import {
   Output,
   booleanAttribute,
 } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const colorVariantMap = {
   orange: {
@@ -41,6 +43,8 @@ const colorVariantMap = {
 
 @Component({
   selector: 'app-button',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './button.component.html',
   styleUrl: './button.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,8 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'app-categories',
   templateUrl: './categories.component.html',
+  standalone: true,
+  imports: [CommonModule],
+  selector: 'app-categories',
   styleUrl: './categories.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
