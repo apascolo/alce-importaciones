@@ -1,0 +1,63 @@
+<nz-layout>
+  <nz-sider nzCollapsible nzWidth="200px">
+    <div class="logo"></div>
+    <ul nz-menu nzTheme="dark" nzMode="inline">
+      <li
+        (click)="setTitle(eRoutes.Root)"
+        nz-menu-item
+        [routerLink]="eRoutes.Root"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <span nz-icon nzType="bar-chart"></span>
+        <span>{{ titlePages[eRoutes.Root] }}</span>
+      </li>
+      <li
+        (click)="setTitle(eRoutes.Products)"
+        nz-menu-item
+        [routerLink]="eRoutes.Products"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <span nz-icon nzType="inbox"></span>
+        <span>{{ titlePages[eRoutes.Products] }}</span>
+      </li>
+      <li
+        (click)="setTitle(eRoutes.Users)"
+        nz-menu-item
+        [routerLink]="eRoutes.Users"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <span nz-icon nzType="team"></span>
+        <span>{{ titlePages[eRoutes.Users] }}</span>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header class="flex items-center justify-between">
+      <h1 class="text-lg px-3 font-medium leading-[64px] text-gray-900">
+        {{ title }}
+      </h1>
+      <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+        <nz-avatar nzIcon="user" class="me-2"></nz-avatar>
+      </a>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item>
+            <span nz-icon nzType="user" class="me-2"></span>
+            Mi perfil
+          </li>
+          <li nz-menu-item (click)="logout()">
+            <span nz-icon nzType="logout" class="me-2"></span>
+            Salir
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </nz-header>
+    <nz-content>
+      <router-outlet />
+    </nz-content>
+    <nz-footer>&copy;{{ year }} - ALCE Importaciones</nz-footer>
+  </nz-layout>
+</nz-layout>
