@@ -22,6 +22,16 @@ import {
   provideStorage,
 } from '@angular/fire/storage';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { IconDefinition } from '@ant-design/icons-angular';
+import * as AllIcons from '@ant-design/icons-angular/icons';
+import { NZ_ICONS } from 'ng-zorro-antd/icon';
+
+const antDesignIcons = AllIcons as {
+  [key: string]: IconDefinition;
+};
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(
+  (key) => antDesignIcons[key]
+);
 
 registerLocaleData(es);
 
@@ -32,6 +42,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
     provideHttpClient(),
+    { provide: NZ_ICONS, useValue: icons },
     importProvidersFrom(
       provideFirebaseApp(() => initializeApp(environment.firebase))
     ),
@@ -39,7 +50,9 @@ export const appConfig: ApplicationConfig = {
       provideAuth(() => {
         if (environment.useEmulators) {
           const fireauth = getAuth();
-          connectAuthEmulator(fireauth, 'http://localhost:9099');
+          connectAuthEmulator(fireauth, 'http://localhost:9099', {
+            disableWarnings: true,
+          });
           return fireauth;
         } else {
           return getAuth();

@@ -6,5 +6,6 @@ export enum eRoutes {
   Categories = 'categories',
   Users = 'users',
   Operations = 'operations',
-  Entities = 'entities',
+  Suppliers = 'suppliers',
+  Customers = 'customers',
 }
