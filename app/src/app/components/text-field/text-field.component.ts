@@ -18,9 +18,10 @@ import { FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 })
 export class TextFieldComponent {
   @Input({ transform: booleanAttribute }) hasError = false;
+  @Input({ transform: booleanAttribute }) required = false;
   @Input() label = 'Label';
   @Input() type: 'text' | 'email' | 'password' = 'text';
-  @Input() placeholder: string;
+  @Input() placeholder: string = '';
   @Input({ required: true }) controlName = 'label';
   @Input() minlength: string;
   @Input() maxlength: string;

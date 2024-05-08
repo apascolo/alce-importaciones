@@ -5,5 +5,7 @@
   [ngClass]="colorClass + ' ' + classes"
   (click)="handleClick()"
 >
+  @if (isLoading) { Espere... } @else{
   {{ name }}
+  }
 </button>

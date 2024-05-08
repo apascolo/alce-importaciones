@@ -3,7 +3,9 @@
     for="email"
     class="block text-sm font-medium leading-6 text-gray-900 mb-1"
   >
-    {{ label }}
+    {{ label }}@if (required) {
+    <span class="text-rose-700 text-lg">*</span>
+    }
   </label>
   <input
     [formControlName]="controlName"

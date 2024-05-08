@@ -1,0 +1,72 @@
+<nz-table [nzData]="data" class="datatable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Empresa</th>
+      <th>Correo</th>
+      <th nzWidth="200px">Teléfono</th>
+      <th nzWidth="50px" class="text-center">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if (isLoading) {
+    <tr>
+      @for ( skeleton of skeletons; track $index) {
+      <td class="datatable">
+        @for ( line of skeletonsLines; track $index) {
+        <nz-skeleton-element
+          nzType="input"
+          [nzActive]="true"
+          style="width: 100%"
+          nzSize="small"
+        ></nz-skeleton-element>
+        }
+      </td>
+      }
+    </tr>
+    } @else { @for (row of data; track row.key) {
+    <tr (dblclick)="handleSelect(row.key)">
+      <td>{{ row.fullName }}</td>
+      <td>{{ row.businessName }}</td>
+      <td>{{ row.email }}</td>
+      <td>{{ row.phone }}</td>
+      <td class="text-center">
+        <a
+          nz-dropdown
+          nzTrigger="click"
+          [nzDropdownMenu]="menu"
+          class="text-gray-900"
+        >
+          <span
+            nz-icon
+            nzType="ellipsis"
+            nzTheme="outline"
+            [nzRotate]="90"
+            class="text-lg"
+          ></span>
+        </a>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            <li
+              nz-menu-item
+              class="hover:bg-gray-200"
+              (click)="handleAction(row.key, eActions.Update)"
+            >
+              <span nz-icon nzType="edit" class="me-2"></span>
+              Editar
+            </li>
+            <li
+              nz-menu-item
+              class="bg-rose-600 hover:bg-rose-800 text-white"
+              (click)="handleAction(row.key, eActions.Delete)"
+            >
+              <span nz-icon nzType="delete" class="me-2"></span>
+              Eliminar
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </td>
+    </tr>
+    } }
+  </tbody>
+</nz-table>

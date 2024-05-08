@@ -1,3 +1,4 @@
+import { menuItems } from './../constants/menuItems';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -12,9 +13,10 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
-import { PagesWithTitle, titlePages } from '@constants/index';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { AuthService } from '@services/auth.service';
+import { PagesWithTitle } from '@customTypes/index';
+import { titlePages } from '@constants/index';
 
 @Component({
   selector: 'app-drawer',
@@ -39,6 +41,7 @@ export class DrawerComponent implements OnInit {
   public eRoutes = eRoutes;
   public title: string;
   public titlePages = titlePages;
+  public menuItems = menuItems;
 
   private router = inject(Router);
   private authService = inject(AuthService);

@@ -11,3 +11,8 @@ input:focus,
 button {
   outline: none;
 }
+
+.datatable .ant-skeleton-element .ant-skeleton-input-sm {
+  width: 100% !important;
+  margin-bottom: 10px;
+}

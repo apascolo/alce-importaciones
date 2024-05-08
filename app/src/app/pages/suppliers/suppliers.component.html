@@ -1,0 +1,72 @@
+<div class="flex justify-end mb-5">
+  <input
+    type="search"
+    class="me-3 w-1/2 py-1 px-2 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6 rounded-md"
+    placeholder="Buscar por nombre o empresa"
+  />
+  <app-button
+    name="Nuevo proveedor"
+    color="gray"
+    classes="w-52"
+    (onSubmit)="handleOpen()"
+  />
+</div>
+
+<app-datatable [data]="listOfData" [isLoading]="isLoading" />
+
+<nz-drawer
+  [nzBodyStyle]="{ overflow: 'auto' }"
+  [nzMaskClosable]="true"
+  [nzWidth]="720"
+  [nzVisible]="isVisible"
+  [nzTitle]="selected ? 'Actualizar' : 'Crear'"
+  [nzFooter]="footerTpl"
+  (nzOnClose)="handleClose()"
+>
+  <form
+    [formGroup]="form"
+    *nzDrawerContent
+    (submit)="handleSubmit()"
+    (keydown.enter)="handleSubmit()"
+  >
+    <h2 class="text-gray-900 font-medium text-lg">Datos del contacto</h2>
+    <hr class="my-2" />
+    <div class="grid gap-4 grid-cols-2 grid-rows-2">
+      <app-text-field
+        controlName="name"
+        label="Nombres"
+        placeholder="Ej. John"
+        required
+      />
+      <app-text-field
+        controlName="lastName"
+        label="Apellidos"
+        placeholder="Ej. Doe"
+        required
+      />
+      <app-text-field
+        controlName="email"
+        label="Correo"
+        placeholder="Ej. proveedor@correo.com"
+        required
+      />
+      <app-text-field
+        controlName="phone"
+        label="Teléfono"
+        placeholder="Ej. Doe"
+      />
+    </div>
+
+    <h2 class="text-gray-900 font-medium text-lg mt-5">Datos del negocio</h2>
+    <hr class="my-2" />
+  </form>
+
+  <ng-template #footerTpl>
+    <div style="float: right">
+      <button nz-button style="margin-right: 8px" (click)="handleClose()">
+        Cancel
+      </button>
+      <button nz-button nzType="primary" (click)="handleClose()">Submit</button>
+    </div>
+  </ng-template>
+</nz-drawer>

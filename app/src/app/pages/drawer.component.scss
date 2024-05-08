@@ -4,14 +4,9 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-nz-header {
-  background: #fff;
-  padding: 0;
-}
-
 nz-content {
   margin: 0 16px;
-  min-height: calc(100vh - 133px);
+  min-height: calc(100vh - 153px);
 }
 
 .inner-content {
@@ -24,8 +19,21 @@ nz-footer {
   text-align: center;
 }
 
+.ant-menu-item:active {
+  background: inherit !important;
+}
+
 .active,
 .ant-menu-item-selected {
   color: white;
-  background-color: rgb(234, 88, 12) !important;
+  background-color: rgba(234, 88, 12, 0.2) !important;
+  position: relative;
+  &::before {
+    border-right: 5px solid rgb(234, 88, 12) !important;
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+  }
 }

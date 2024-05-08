@@ -54,6 +54,14 @@ export const routes: Routes = [
           ),
         ...canActivate(redirectToLogin),
       },
+      {
+        path: eRoutes.Suppliers,
+        loadComponent: () =>
+          import('./pages/suppliers/suppliers.component').then(
+            (m) => m.SuppliersComponent
+          ),
+        ...canActivate(redirectToLogin),
+      },
     ],
   },
   {
