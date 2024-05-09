@@ -6,6 +6,7 @@ import * as dotenv from 'dotenv';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import serviceAccountData from '../alce-importaciones-firebase-adminsdk-e1fl0-d6a55bc56a.json';
+import { verifyAdminToken } from '@middlewares/verifyAdmin';
 
 const app = express();
 app.use(cors({ origin: true }));
@@ -28,6 +29,16 @@ app.get(eEndpoints.Root, (_: Request, res: Response) => {
                 ADMIN ROUTES
 ****************************************************/
 app.get(eEndpoints.CreateUserAdmin, ROUTES.createUserAdmin);
+
+/** **************************************************
+                ENTITIES ROUTES
+****************************************************/
+app.post(eEndpoints.Entities, verifyAdminToken, ROUTES.createEntity);
+app.put(`${eEndpoints.Entities}/:id`, verifyAdminToken, ROUTES.updateEntity);
+app.delete(`${eEndpoints.Entities}/:id`, verifyAdminToken, ROUTES.softDeleteEntity);
+
+exports.entityCreated = ROUTES.entityCreated;
+exports.entityDeleted = ROUTES.entityDeleted;
 
 // START API
 exports.api = functions.https.onRequest(app);

@@ -18,7 +18,7 @@ import { TextFieldComponent } from '@components/text-field/text-field.component'
 import { eEntityType } from '@enums/eEntityType';
 import {
   IEntity,
-  IEntityColumn,
+  IEntitySupplierColumn,
   IEntityControls,
   IEntityCreate,
 } from '@interfaces/index';
@@ -49,7 +49,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
 
   public isLoading = false;
   public isSubmitting = false;
-  public listOfData: IEntityColumn[] = Array(50)
+  public listOfData: IEntitySupplierColumn[] = Array(50)
     .fill(null)
     .map((_, i) => ({
       key: `${i + 1}`,
@@ -84,6 +84,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
       documentNumber: ['', [Validators.required]],
       notes: [''],
       phone: [''],
+      customerAcquisitionId: [''],
       email: ['', [Validators.required, Validators.email]],
       address: ['', [Validators.required]],
       type: [
