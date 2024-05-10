@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as admin from 'firebase-admin';
 import { db } from '../config/environment';
-import { TotalDB } from 'src/types/TotalDb';
-import { eCollentions } from '@enums/eCollections';
+import { eCollentions } from 'src/enums';
+import { TotalDB } from 'src/types';
 
 const updateTotalDb = async (data: TotalDB) => {
   const dataToUpdate: Record<string, any> = {};

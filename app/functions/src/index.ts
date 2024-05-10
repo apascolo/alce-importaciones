@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import serviceAccountData from '../alce-importaciones-firebase-adminsdk-e1fl0-d6a55bc56a.json';
-import { verifyAdminToken } from '@middlewares/verifyAdmin';
+import { verifyAdminToken } from './middlewares';
 
 const app = express();
 app.use(cors({ origin: true }));

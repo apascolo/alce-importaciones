@@ -14,16 +14,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es2017",
-    "paths": {
-      "@interfaces/*": ["src/interfaces/*"],
-      "@utils/*": ["src/utils/*"],
-      "@constants/*": ["src/constants/*"],
-      "@routes/*": ["src/routes/*"],
-      "@middlewares/*": ["src/middlewares/*"],
-      "@enums/*": ["src/enums/*"],
-      "@types/*": ["src/type/*"]
-    }
+    "target": "es2017"
   },
   "compileOnSave": true,
   "include": ["src", "src/**/*"],

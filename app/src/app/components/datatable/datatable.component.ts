@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { IEntityColumn } from '@interfaces/IEntity';
+import { IEntitySupplierColumn } from '@interfaces/IEntity';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -31,7 +31,7 @@ import { eActions } from '@enums/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatatableComponent {
-  @Input() data: IEntityColumn[] = [];
+  @Input() data: IEntitySupplierColumn[] = [];
   @Input({ transform: booleanAttribute }) isLoading = false;
 
   @Output() onUpdate: EventEmitter<string> = new EventEmitter<string>();

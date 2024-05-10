@@ -1,12 +1,10 @@
 import { Request, Response } from 'express';
-import { IEntity, IEntityCreate, IEntityUpdate, IFullAudited } from '@interfaces/index';
-import { eEntityType } from '@enums/eEntityType';
-import { handleError } from '@utils/handleError';
-import { INDEX_ALGOLIA, clientAlgolia, db, functions } from 'src/config/environment';
-import { eCollentions } from '@enums/eCollections';
+import { TOTALSDB } from 'src/constants';
+import { eEntityType, eCollentions } from 'src/enums';
+import { IEntityCreate, IEntity, IFullAudited, IEntityUpdate } from 'src/interfaces';
 import { TotalDB } from 'src/types/TotalDb';
-import { TOTALSDB } from '@constants/totalsDb';
-import { updateTotalDb } from '@utils/updateTotalDb';
+import { handleError, updateTotalDb } from 'src/utils';
+import { INDEX_ALGOLIA, clientAlgolia, db, functions } from 'src/config/environment';
 
 const createEntity = async (req: Request, res: Response) => {
   interface Props {
@@ -198,30 +196,34 @@ const softDeleteEntity = async (req: Request, res: Response) => {
   }
 };
 
-const entityCreated = functions.firestore.document(`${eCollentions.Entities}/{entityId}`).onCreate(async (snap) => {
-  const entity = snap.data() as IEntity;
-  const index = clientAlgolia.initIndex(INDEX_ALGOLIA.entities);
-  index.saveObject({ ...entity, objectID: snap.id });
+const entityCreated = functions.firestore
+  .document(`${eCollentions.Entities}/{entityId}`)
+  .onCreate(async (snap: any) => {
+    const entity = snap.data() as IEntity;
+    const index = clientAlgolia.initIndex(INDEX_ALGOLIA.entities);
+    index.saveObject({ ...entity, objectID: snap.id });
 
-  const data = {} as TotalDB;
+    const data = {} as TotalDB;
 
-  if (entity.type === eEntityType.Customer) data[TOTALSDB.totalCustomers] = 1;
-  if (entity.type === eEntityType.Supplier) data[TOTALSDB.totalSuppliers] = 1;
+    if (entity.type === eEntityType.Customer) data[TOTALSDB.totalCustomers] = 1;
+    if (entity.type === eEntityType.Supplier) data[TOTALSDB.totalSuppliers] = 1;
 
-  return await updateTotalDb(data);
-});
+    return await updateTotalDb(data);
+  });
 
-const entityDeleted = functions.firestore.document(`${eCollentions.Entities}/{entityId}`).onDelete(async (snap) => {
-  const entity = snap.data() as IEntity;
-  const index = clientAlgolia.initIndex(INDEX_ALGOLIA.entities);
-  index.deleteObject(snap.id);
+const entityDeleted = functions.firestore
+  .document(`${eCollentions.Entities}/{entityId}`)
+  .onDelete(async (snap: any) => {
+    const entity = snap.data() as IEntity;
+    const index = clientAlgolia.initIndex(INDEX_ALGOLIA.entities);
+    index.deleteObject(snap.id);
 
-  const data = {} as TotalDB;
+    const data = {} as TotalDB;
 
-  if (entity.type === eEntityType.Customer) data[TOTALSDB.totalCustomers] = -1;
-  if (entity.type === eEntityType.Supplier) data[TOTALSDB.totalSuppliers] = -1;
+    if (entity.type === eEntityType.Customer) data[TOTALSDB.totalCustomers] = -1;
+    if (entity.type === eEntityType.Supplier) data[TOTALSDB.totalSuppliers] = -1;
 
-  return await updateTotalDb(data);
-});
+    return await updateTotalDb(data);
+  });
 
 export { createEntity, updateEntity, softDeleteEntity, entityCreated, entityDeleted };

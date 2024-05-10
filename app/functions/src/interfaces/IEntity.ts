@@ -1,4 +1,4 @@
-import { eEntityType } from '@enums/eEntityType';
+import { eEntityType } from 'src/enums';
 import { IFullAudited } from './IFullAudited';
 import { IIdentification } from './IIdentification';
 
