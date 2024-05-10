@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import { Request, Response, NextFunction } from 'express';
-import { handleError } from 'src/utils';
+import { handleError } from '../utils/handleError';
 
 export const verifyAdminToken = (req: Request, res: Response, next: NextFunction) => {
   const authToken = req.body.authToken || req.query.authToken;

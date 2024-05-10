@@ -1,9 +1,7 @@
+import * as admin from 'firebase-admin';
 import { getFirestore } from 'firebase-admin/firestore';
 import * as functions from 'firebase-functions';
 import algoliasearch from 'algoliasearch';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
 
 const db = getFirestore();
 
@@ -21,4 +19,4 @@ const INDEX_ALGOLIA = {
 
 const clientAlgolia = algoliasearch(algolia.id, algolia.adminKey);
 
-export { db, functions, clientAlgolia, INDEX_ALGOLIA };
+export { db, functions, clientAlgolia, INDEX_ALGOLIA, admin };

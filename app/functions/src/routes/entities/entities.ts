@@ -1,10 +1,13 @@
 import { Request, Response } from 'express';
-import { TOTALSDB } from 'src/constants';
-import { eEntityType, eCollentions } from 'src/enums';
-import { IEntityCreate, IEntity, IFullAudited, IEntityUpdate } from 'src/interfaces';
-import { TotalDB } from 'src/types/TotalDb';
-import { handleError, updateTotalDb } from 'src/utils';
-import { INDEX_ALGOLIA, clientAlgolia, db, functions } from 'src/config/environment';
+import { TOTALSDB } from '../../constants/totalsDb';
+import { eCollentions } from '../../enums/eCollections';
+import { eEntityType } from '../../enums/eEntityType';
+import { IEntityCreate, IEntity, IEntityUpdate } from '../../interfaces/IEntity';
+import { IFullAudited } from '../../interfaces/IFullAudited';
+import { handleError } from '../../utils/handleError';
+import { updateTotalDb } from '../../utils/updateTotalDb';
+import { INDEX_ALGOLIA, clientAlgolia, db, functions } from '../../config/environment';
+import { TotalDB } from '../../types/TotalDb';
 
 const createEntity = async (req: Request, res: Response) => {
   interface Props {
