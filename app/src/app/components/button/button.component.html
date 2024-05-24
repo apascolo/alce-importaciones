@@ -1,11 +1,12 @@
 <button
   [type]="type"
   [disabled]="isLoading"
-  class="rounded-md block w-full transition-all fond-medium uppercase py-1.5"
-  [ngClass]="colorClass + ' ' + classes"
+  [class]="
+    'rounded-md block w-full transition-all fond-medium uppercase py-1.5 px-3 ' +
+    colorClass
+  "
+  [ngClass]="{ 'border-gray-500': isLoading }"
   (click)="handleClick()"
 >
-  @if (isLoading) { Espere... } @else{
   {{ name }}
-  }
 </button>

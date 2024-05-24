@@ -9,7 +9,6 @@ export const verifyAdminToken = (req: Request, res: Response, next: NextFunction
       .auth()
       .verifyIdToken(authToken)
       .then((decodedToken) => {
-        // ! verificar que claims llegan, a ver si se puede validar el role = admin
         console.log(decodedToken);
         if (!decodedToken.admin) {
           return res.status(401).send('Lo siento, esta acción solo está permitida para administradores');

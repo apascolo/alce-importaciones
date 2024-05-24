@@ -1,34 +1,48 @@
 <div class="flex justify-end mb-5">
-  <input
-    type="search"
-    class="me-3 w-1/2 py-1 px-2 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6 rounded-md"
-    placeholder="Buscar por nombre o empresa"
-  />
-  <app-button
-    name="Nuevo proveedor"
-    color="gray"
-    classes="w-52"
-    (onSubmit)="handleOpen()"
-  />
+  <div class="me-3 w-1/2 relative">
+    <input
+      [(ngModel)]="query"
+      (keyup.enter)="handleSearch(undefined, true)"
+      type="search"
+      class="w-full h-full py-1 px-2 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6 rounded-md"
+      placeholder="Buscar por nombre o empresa"
+    />
+    @if (query.length) {
+    <span
+      nz-icon
+      nzType="close-circle"
+      nzTheme="fill"
+      class="absolute right-3 top-1/4 text-red-700 cursor-pointer text-lg"
+      (click)="handleClearSearch(true)"
+    ></span>
+    }
+  </div>
+  <app-button name="Nuevo proveedor" color="gray" (onSubmit)="handleOpen()" />
 </div>
 
-<app-datatable [data]="listOfData" [isLoading]="isLoading" />
+<app-datatable
+  [data]="suppliers"
+  [columns]="columns"
+  [isLoading]="isLoading"
+  (onAction)="handleAction($event)"
+/>
+
+@if (isLoadingInfiniteScroll) {
+<div class="py-8">
+  <nz-spin [nzSpinning]="isLoadingInfiniteScroll" nzTip="Cargando..." />
+</div>
+}
 
 <nz-drawer
   [nzBodyStyle]="{ overflow: 'auto' }"
   [nzMaskClosable]="true"
-  [nzWidth]="720"
-  [nzVisible]="isVisible"
+  [nzWidth]="600"
+  [nzVisible]="openDrawer"
   [nzTitle]="selected ? 'Actualizar' : 'Crear'"
   [nzFooter]="footerTpl"
   (nzOnClose)="handleClose()"
 >
-  <form
-    [formGroup]="form"
-    *nzDrawerContent
-    (submit)="handleSubmit()"
-    (keydown.enter)="handleSubmit()"
-  >
+  <form *nzDrawerContent [formGroup]="form" (keydown.enter)="handleSubmit()">
     <h2 class="text-gray-900 font-medium text-lg">Datos del contacto</h2>
     <hr class="my-2" />
     <div class="grid gap-4 grid-cols-2 grid-rows-2">
@@ -37,36 +51,79 @@
         label="Nombres"
         placeholder="Ej. John"
         required
+        [hasError]="controlInvalid('name')"
       />
       <app-text-field
         controlName="lastName"
         label="Apellidos"
         placeholder="Ej. Doe"
         required
+        [hasError]="controlInvalid('lastName')"
       />
       <app-text-field
         controlName="email"
         label="Correo"
         placeholder="Ej. proveedor@correo.com"
         required
+        [hasError]="controlInvalid('email')"
       />
-      <app-text-field
-        controlName="phone"
-        label="Teléfono"
-        placeholder="Ej. Doe"
-      />
+
+      <app-phone-field controlNameInput="phone" controlNameSelect="codePhone" />
     </div>
 
     <h2 class="text-gray-900 font-medium text-lg mt-5">Datos del negocio</h2>
     <hr class="my-2" />
+
+    <div class="grid gap-4 grid-cols-2 grid-rows-1 mb-4">
+      <app-text-field
+        controlName="businessName"
+        label="Razón social"
+        placeholder="Nombre de la empresa"
+      />
+
+      <app-document-field
+        controlNameInput="documentNumber"
+        controlNameSelect="documentType"
+      />
+    </div>
+
+    <div class="grid grid-cols-1 grid-rows-1 mb-4">
+      <app-text-field
+        controlName="address"
+        label="Dirección"
+        placeholder="Dirección de la empresa"
+      />
+    </div>
+
+    <div class="grid grid-cols-1 grid-rows-1">
+      <app-text-field
+        controlName="notes"
+        label="Notas"
+        placeholder="Detalles adicionales"
+        textarea
+      />
+    </div>
   </form>
 
   <ng-template #footerTpl>
-    <div style="float: right">
-      <button nz-button style="margin-right: 8px" (click)="handleClose()">
-        Cancel
-      </button>
-      <button nz-button nzType="primary" (click)="handleClose()">Submit</button>
+    <div class="flex justify-end">
+      <div class="w-32 me-2">
+        <app-button
+          color="gray"
+          variant="outline"
+          name="Cancelar"
+          [isLoading]="isLoading"
+          (onSubmit)="handleClose()"
+        />
+      </div>
+      <div class="w-32">
+        <app-button
+          color="orange"
+          [isLoading]="isLoading"
+          [name]="selected ? 'Actualizar' : 'Crear'"
+          (onSubmit)="handleSubmit()"
+        />
+      </div>
     </div>
   </ng-template>
 </nz-drawer>

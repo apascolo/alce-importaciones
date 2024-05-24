@@ -25,6 +25,10 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { NZ_ICONS } from 'ng-zorro-antd/icon';
+import {
+  NgxCurrencyInputMode,
+  provideEnvironmentNgxCurrency,
+} from 'ngx-currency';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -32,6 +36,21 @@ const antDesignIcons = AllIcons as {
 const icons: IconDefinition[] = Object.keys(antDesignIcons).map(
   (key) => antDesignIcons[key]
 );
+
+const ngxCurrencyConf = {
+  align: 'end',
+  allowNegative: true,
+  allowZero: true,
+  decimal: ',',
+  precision: 2,
+  prefix: '',
+  suffix: ' $',
+  thousands: '.',
+  nullable: true,
+  min: null,
+  max: null,
+  inputMode: NgxCurrencyInputMode.Natural,
+};
 
 registerLocaleData(es);
 
@@ -43,6 +62,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(),
     { provide: NZ_ICONS, useValue: icons },
+    provideEnvironmentNgxCurrency(ngxCurrencyConf),
     importProvidersFrom(
       provideFirebaseApp(() => initializeApp(environment.firebase))
     ),

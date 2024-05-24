@@ -9,11 +9,12 @@ import {
 } from '@angular/core';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { IEntitySupplierColumn } from '@interfaces/IEntity';
-import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { IEntityColumn } from '@interfaces/entity.interface';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { eActions } from '@enums/index';
+import { eActions } from '@enums/actions.enum';
+import { IActionResponse } from '@interfaces/action-response.interface';
+import { IColumn } from '@interfaces/column.interface';
 
 @Component({
   selector: 'app-datatable',
@@ -22,7 +23,6 @@ import { eActions } from '@enums/index';
     CommonModule,
     NzTableModule,
     NzDividerModule,
-    NzSkeletonModule,
     NzDropDownModule,
     NzIconModule,
   ],
@@ -31,24 +31,24 @@ import { eActions } from '@enums/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatatableComponent {
-  @Input() data: IEntitySupplierColumn[] = [];
+  @Input() data: any[] = [];
+  @Input() columns: IColumn[] = [];
   @Input({ transform: booleanAttribute }) isLoading = false;
+  @Input({ transform: booleanAttribute }) usePagination = false;
 
-  @Output() onUpdate: EventEmitter<string> = new EventEmitter<string>();
-  @Output() onDelete: EventEmitter<string> = new EventEmitter<string>();
-  @Output() onSelect: EventEmitter<string> = new EventEmitter<string>();
+  @Output() onAction: EventEmitter<IActionResponse> =
+    new EventEmitter<IActionResponse>();
 
+  public listOfCurrentPageData: readonly unknown[] = [];
   public skeletons = [...Array(5).keys()];
   public skeletonsLines = [...Array(10).keys()];
   public eActions = eActions;
 
-  public handleSelect(id: string) {
-    this.onSelect.emit(id);
+  onCurrentPageDataChange(listOfCurrentPageData: readonly unknown[]): void {
+    this.listOfCurrentPageData = listOfCurrentPageData;
   }
 
   public handleAction(id: string, action: eActions) {
-    if (action === eActions.Update) this.onUpdate.emit(id);
-
-    if (action === eActions.Delete) this.onDelete.emit(id);
+    this.onAction.emit({ id, action });
   }
 }

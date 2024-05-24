@@ -12,7 +12,22 @@ button {
   outline: none;
 }
 
+// DATATABLE
+
 .datatable .ant-skeleton-element .ant-skeleton-input-sm {
   width: 100% !important;
   margin-bottom: 10px;
+}
+
+.ant-table-content {
+  overflow: auto;
+}
+
+// SPIN
+
+.ant-spin {
+  color: orangered;
+}
+.ant-spin-dot-item {
+  background-color: orangered;
 }

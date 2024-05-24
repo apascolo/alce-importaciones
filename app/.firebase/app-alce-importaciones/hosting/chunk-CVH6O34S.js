@@ -1,0 +1,2 @@
+import{Qb as i,Rb as r,bd as s,hc as o,mc as d,za as a}from"./chunk-K3OKKPLL.js";var l=(()=>{let e=class e{};e.\u0275fac=function(n){return new(n||e)},e.\u0275cmp=a({type:e,selectors:[["app-dashboard"]],standalone:!0,features:[d],decls:3,vars:0,template:function(n,m){n&1&&(i(0,"p"),o(1,"dashboard works!"),r(),o(2,`,
+`))},dependencies:[s],changeDetection:0});let t=e;return t})();export{l as DashboardComponent};

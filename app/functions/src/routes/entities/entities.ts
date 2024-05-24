@@ -43,23 +43,10 @@ const createEntity = async (req: Request, res: Response) => {
     return res.status(400).send(`La dirección del ${type} es obligatoria`);
   }
   if (!type || !type.length || (type !== eEntityType.Customer && type !== eEntityType.Supplier)) {
-    return res.status(400).send('Lo siento, no has indicato el tipo de objeto de este registro');
+    return res.status(400).send('Lo siento, no has indicado el tipo de objeto de este registro');
   }
 
   try {
-    const entityExists = await db
-      .collection(eCollentions.Entities)
-      .where('type', '==', type)
-      .where('identificationDocument', '==', identificationDocument)
-      .get();
-
-    const entityRef = entityExists.docs[0].ref;
-    const isDeleted = (entityExists.docs[0].data() as IEntity).isDeleted;
-
-    if (!entityExists.empty && !isDeleted) {
-      return res.status(409).send(`Lo siento, ya existe un ${type} con esta identificación`);
-    }
-
     const newEntity: Omit<IEntity, 'id'> = {
       name: nameTrim,
       lastName: lastNameTrim,
@@ -71,16 +58,30 @@ const createEntity = async (req: Request, res: Response) => {
       address: addressTrim ?? null,
       type,
       createdAt: Date.now(),
+      isDeleted: false,
     };
 
-    if (!entityExists.empty && isDeleted) {
+    const entityExists = await db
+      .collection(eCollentions.Entities)
+      .where('type', '==', type)
+      .where('identificationDocument', '==', identificationDocumentTrim)
+      .get();
+
+    if (!entityExists.empty) {
+      const entityRef = entityExists.docs[0];
+      const isDeleted = (entityRef.data() as IEntity).isDeleted;
+
+      if (!isDeleted) {
+        return res.status(409).send(`Lo siento, ya existe un ${type} con esta identificación`);
+      }
+
       const dataDelete: IFullAudited = {
         isDeleted: false,
         deletedAt: null,
         deleterId: null,
       };
 
-      await entityRef.update({ ...newEntity, ...dataDelete });
+      await entityRef.ref.update({ ...newEntity, ...dataDelete });
 
       return res.status(201).send({ ...newEntity, id: entityRef.id, objectID: entityRef.id });
     }
@@ -139,10 +140,10 @@ const updateEntity = async (req: Request, res: Response) => {
     const entityExists = await db
       .collection(eCollentions.Entities)
       .where('type', '==', type)
-      .where('identificationDocument', '==', identificationDocument)
+      .where('identificationDocument', '==', identificationDocumentTrim)
       .get();
 
-    if (!entityExists.empty) {
+    if (!entityExists.empty && id !== entityExists.docs[0].id) {
       return res.status(409).send(`Lo siento, ya existe un ${type} con esta identificación`);
     }
 
@@ -160,7 +161,8 @@ const updateEntity = async (req: Request, res: Response) => {
     };
 
     const entityRef = db.collection(eCollentions.Entities).doc(id);
-    await entityRef.update({ ...newEntity });
+    const currentEntity = await entityRef.get();
+    await entityRef.update({ ...currentEntity.data(), ...newEntity });
 
     return res.send({ ...newEntity, id, objectID: id });
   } catch (error) {
@@ -201,7 +203,7 @@ const softDeleteEntity = async (req: Request, res: Response) => {
 
 const entityCreated = functions.firestore
   .document(`${eCollentions.Entities}/{entityId}`)
-  .onCreate(async (snap: any) => {
+  .onCreate(async (snap: functions.firestore.QueryDocumentSnapshot) => {
     const entity = snap.data() as IEntity;
     const index = clientAlgolia.initIndex(INDEX_ALGOLIA.entities);
     index.saveObject({ ...entity, objectID: snap.id });
@@ -214,19 +216,38 @@ const entityCreated = functions.firestore
     return await updateTotalDb(data);
   });
 
-const entityDeleted = functions.firestore
+const entityUpdate = functions.firestore
   .document(`${eCollentions.Entities}/{entityId}`)
-  .onDelete(async (snap: any) => {
-    const entity = snap.data() as IEntity;
+  .onUpdate(async (snap: functions.Change<functions.firestore.QueryDocumentSnapshot>) => {
+    const entity = snap.before.data() as IEntity;
+    const entityUpdated = snap.after.data() as IEntity;
     const index = clientAlgolia.initIndex(INDEX_ALGOLIA.entities);
-    index.deleteObject(snap.id);
+    index.saveObject({ ...entityUpdated, objectID: snap.after.id });
 
-    const data = {} as TotalDB;
+    if (!entity.isDeleted && entityUpdated.isDeleted) {
+      const data = {} as TotalDB;
 
-    if (entity.type === eEntityType.Customer) data[TOTALSDB.totalCustomers] = -1;
-    if (entity.type === eEntityType.Supplier) data[TOTALSDB.totalSuppliers] = -1;
+      if (entity.type === eEntityType.Customer) data[TOTALSDB.totalCustomers] = -1;
+      if (entity.type === eEntityType.Supplier) data[TOTALSDB.totalSuppliers] = -1;
 
-    return await updateTotalDb(data);
+      return await updateTotalDb(data);
+    }
+
+    if (entity.isDeleted && !entityUpdated.isDeleted) {
+      const data = {} as TotalDB;
+
+      if (entity.type === eEntityType.Customer) data[TOTALSDB.totalCustomers] = 1;
+      if (entity.type === eEntityType.Supplier) data[TOTALSDB.totalSuppliers] = 1;
+
+      return await updateTotalDb(data);
+    }
   });
 
-export { createEntity, updateEntity, softDeleteEntity, entityCreated, entityDeleted };
+const entityDeleted = functions.firestore
+  .document(`${eCollentions.Entities}/{entityId}`)
+  .onDelete(async (snap: functions.firestore.QueryDocumentSnapshot) => {
+    const index = clientAlgolia.initIndex(INDEX_ALGOLIA.entities);
+    index.deleteObject(snap.id);
+  });
+
+export { createEntity, updateEntity, softDeleteEntity, entityCreated, entityDeleted, entityUpdate };

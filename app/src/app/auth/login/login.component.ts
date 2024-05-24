@@ -14,10 +14,11 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import { ButtonComponent } from '@components/button/button.component';
 import { TextFieldComponent } from '@components/text-field/text-field.component';
-import { eRoutes } from '@enums/index';
+import { eNotificationType } from '@enums/notification-type.enum';
+import { eRoutes } from '@enums/routes.enum';
 import { ILogin, ILoginControls } from '@interfaces/index';
 import { AuthService } from '@services/auth.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +37,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
-  private message = inject(NzMessageService);
+  private notification = inject(NzNotificationService);
   private router = inject(Router);
 
   public form: FormGroup<ILoginControls>;
@@ -83,8 +84,8 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl(eRoutes.Root);
       })
       .catch((err: any) => {
-        this.message.error(err.message);
         this.isLoading = false;
+        this.notification.create(eNotificationType.Error, 'Error', err.message);
       });
   }
 }

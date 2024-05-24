@@ -1,0 +1,50 @@
+<div [formGroup]="fgd.form">
+  <label
+    [for]="controlNameInput"
+    class="block text-sm font-medium leading-6 text-gray-900 mb-1"
+  >
+    {{ label }}@if (required) {
+    <span class="text-rose-700 text-lg">*</span>
+    }
+  </label>
+  <div class="grid gap-4 grid-cols-2 grid-rows-1">
+    <div class="relative" (document:click)="handleClickOutside()">
+      <div
+        style="min-height: 40px"
+        class="block w-full rounded-md border-0 p-2 cursor-pointer text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6"
+        (click)="handleToggleSelect($event)"
+      >
+        <span [class]="selectedFlag"></span> {{ selectedCode }}
+      </div>
+      @if(openSelect) {
+      <div
+        class="absolute rounded-md w-full top-9 left-0 ring-1 ring-inset ring-gray-300 bg-white mt-2 max-h-52 overflow-auto"
+      >
+        @for (value of flagsCode; track value.code) {
+        <p
+          class="m-0 font-medium cursor-pointer hover:bg-slate-100 p-2"
+          (click)="handleCodePhone(value)"
+        >
+          <span [class]="value.flag"></span>
+          {{ value.code }}
+        </p>
+        }
+      </div>
+      }
+    </div>
+    <input
+      [formControlName]="controlNameInput"
+      [id]="controlNameInput"
+      [name]="controlNameInput"
+      type="text"
+      [placeholder]="placeholder"
+      class="block w-full rounded-md border-0 p-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6"
+      [ngClass]="hasError ? 'ring-rose-600 ' + classes : classes"
+      [minlength]="minlength"
+      [maxlength]="maxlength"
+    />
+  </div>
+  @if (hasError) {
+  <small class="text-rose-600 font-medium">Campo requerido</small>
+  }
+</div>

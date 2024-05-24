@@ -1,4 +1,4 @@
-import { menuItems } from './../constants/menuItems';
+import { menuItems } from '../constants/menu-items.interface';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -7,7 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
-import { eRoutes } from '@enums/eRoutes';
+import { eRoutes } from '@enums/routes.enum';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';

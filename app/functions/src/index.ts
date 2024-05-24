@@ -29,6 +29,7 @@ app.put(`${eEndpoints.Entities}/:id`, verifyAdminToken, ROUTES.updateEntity);
 app.delete(`${eEndpoints.Entities}/:id`, verifyAdminToken, ROUTES.softDeleteEntity);
 
 exports.entityCreated = ROUTES.entityCreated;
+exports.entityUpdate = ROUTES.entityUpdate;
 exports.entityDeleted = ROUTES.entityDeleted;
 
 // START API

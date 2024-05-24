@@ -1,12 +1,36 @@
 <div [formGroup]="fgd.form">
   <label
-    for="email"
+    [for]="controlName"
     class="block text-sm font-medium leading-6 text-gray-900 mb-1"
   >
     {{ label }}@if (required) {
     <span class="text-rose-700 text-lg">*</span>
     }
   </label>
+  @if (currency) {
+  <input
+    [formControlName]="controlName"
+    [id]="controlName"
+    [name]="controlName"
+    [type]="type"
+    [placeholder]="placeholder"
+    class="block w-full rounded-md border-0 p-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6"
+    [ngClass]="hasError ? 'ring-rose-600 ' + classes : classes"
+    [minlength]="minlength"
+    [maxlength]="maxlength"
+    currencyMask
+  />
+  } @else if (textarea) {
+  <textarea
+    [formControlName]="controlName"
+    [id]="controlName"
+    [name]="controlName"
+    [placeholder]="placeholder"
+    class="block w-full rounded-md border-0 p-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6"
+    [ngClass]="hasError ? 'ring-rose-600 ' + classes : classes"
+    rows="3"
+  ></textarea>
+  } @else {
   <input
     [formControlName]="controlName"
     [id]="controlName"
@@ -18,7 +42,7 @@
     [minlength]="minlength"
     [maxlength]="maxlength"
   />
-  @if (hasError) {
+  } @if (hasError) {
   <small class="text-rose-600 font-medium">Campo requerido</small>
   }
 </div>

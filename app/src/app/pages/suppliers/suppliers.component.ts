@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  HostListener,
   OnDestroy,
   OnInit,
   inject,
@@ -11,20 +12,36 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  FormsModule,
 } from '@angular/forms';
 import { ButtonComponent } from '@components/button/button.component';
+import { PhoneFieldComponent } from '@components/phone-field/phone-field.component';
 import { DatatableComponent } from '@components/datatable/datatable.component';
 import { TextFieldComponent } from '@components/text-field/text-field.component';
-import { eEntityType } from '@enums/eEntityType';
 import {
   IEntity,
-  IEntitySupplierColumn,
-  IEntityControls,
+  IEntityColumn,
   IEntityCreate,
+  IEntityUpdate,
+  IEntityControls,
+  IColumn,
+  IGetEntity,
 } from '@interfaces/index';
-import { SuppliersService } from '@services/suppliers.service';
+import { EntitiesService } from '@services/entities.service';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { Subscription } from 'rxjs';
+import { DocumentFieldComponent } from '@components/document-field/document-field.component';
+import { AuthService } from '@services/auth.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { eEntityType } from '@enums/entity-type.enum';
+import { IActionResponse } from '@interfaces/action-response.interface';
+import { eActions } from '@enums/actions.enum';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { eDocumentType } from '@enums/document-type.enum';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { index } from 'src/environments/configurations';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-suppliers',
@@ -34,59 +51,171 @@ import { Subscription } from 'rxjs';
     DatatableComponent,
     ButtonComponent,
     NzDrawerModule,
-    ReactiveFormsModule,
     TextFieldComponent,
+    PhoneFieldComponent,
+    DocumentFieldComponent,
+    NzModalModule,
+    ReactiveFormsModule,
+    NzDrawerModule,
+    NzSpinModule,
+    FormsModule,
+    NzIconModule,
   ],
   templateUrl: './suppliers.component.html',
   styleUrl: './suppliers.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SuppliersComponent implements OnInit, OnDestroy {
-  private fb = inject(FormBuilder);
-  private suppliersService = inject(SuppliersService);
+  private entitiesService = inject(EntitiesService);
+  private authService = inject(AuthService);
+  private notification = inject(NzNotificationService);
+  private modal = inject(NzModalService);
 
-  private subscription: Subscription;
+  private subscriptions: Subscription[] = [];
+  private entities: IEntity[] = [];
+  private entitiesBackup: IEntity[] = [];
+  private requestLimit = 15;
+  private allDataUploaded = false;
+  private getEntityProps: IGetEntity = {
+    type: eEntityType.Supplier,
+    requestLimit: this.requestLimit,
+  };
 
-  public isLoading = false;
+  public isLoading = true;
+  public suppliers: IEntityColumn[] = [];
+  public columns: IColumn[] = [
+    {
+      name: 'Nombre',
+      key: 'fullName',
+      width: null,
+    },
+    {
+      name: 'Empresa',
+      key: 'businessName',
+      width: null,
+    },
+    {
+      name: 'Identificación',
+      key: 'identificationDocument',
+      width: null,
+    },
+    {
+      name: 'Correo',
+      key: 'email',
+      width: null,
+    },
+    {
+      name: 'Teléfono',
+      key: 'phone',
+      width: '200px',
+    },
+    {
+      name: 'Acciones',
+      key: 'actions',
+      width: '50px',
+    },
+  ];
+  public selected?: IEntity;
+  public openDrawer = false;
   public isSubmitting = false;
-  public listOfData: IEntitySupplierColumn[] = Array(50)
-    .fill(null)
-    .map((_, i) => ({
-      key: `${i + 1}`,
-      fullName: 'John Brown ' + i + 1,
-      businessName: 'nombre de empresa' + i + 1,
-      phone: '+58-4244481659',
-      email: 'email@gmail.com',
-    }));
+  public isLoadingInfiniteScroll = false;
+  public query = '';
 
-  public isVisible = true;
+  private fb = inject(FormBuilder);
   public form: FormGroup<IEntityControls>;
-  public selected: IEntity;
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll() {
+    const scrollPosition = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const documentHeight =
+      document.documentElement.scrollHeight ?? document.body.scrollHeight;
+
+    if (scrollPosition + windowHeight >= documentHeight) {
+      if (this.entities.length && !this.allDataUploaded) {
+        this.isLoadingInfiniteScroll = true;
+        const lastRequest = this.entities[this.entities.length - 1].createdAt;
+        this.getEntityProps = { ...this.getEntityProps, lastRequest };
+        if (!this.query.length) {
+          this.loadData();
+        } else {
+          const offset = this.entities.length;
+          this.handleSearch(offset);
+        }
+      }
+    }
+  }
 
   constructor() {
     this.buildForm();
   }
 
   public ngOnDestroy(): void {
-    if (this.subscription) this.subscription.unsubscribe();
+    if (this.subscriptions.length)
+      this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   public ngOnInit(): void {
     this.buildForm();
+    this.loadData();
+  }
+
+  public controlInvalid(control: string) {
+    return this.form.get(control)?.invalid && this.form.get(control)?.dirty;
+  }
+
+  public loadData() {
+    const getData = this.entitiesService
+      .getList(this.getEntityProps)
+      .subscribe({
+        next: (response) => {
+          this.allDataUploaded = response.length === 0;
+          this.mapEntities(response);
+        },
+        error: (err) =>
+          this.notification.error(`Error ${err.status}`, err.error),
+      });
+
+    this.subscriptions.push(getData);
   }
 
   private buildForm() {
+    const {
+      name,
+      lastName,
+      businessName,
+      notes,
+      phone,
+      customerAcquisitionId,
+      email,
+      address,
+      identificationDocument,
+    } = this.selected || {};
+
+    let documentType, documentNumber, codePhone, phoneNumber;
+
+    if (this.selected) {
+      documentType = identificationDocument?.split('-')[0] as eDocumentType;
+      documentNumber = identificationDocument?.split('-')[1];
+      codePhone = phone?.split('-')[0];
+      phoneNumber = phone?.split('-')[1];
+    }
+
     this.form = this.fb.group({
-      name: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      businessName: ['', [Validators.required]],
-      documentType: ['', [Validators.required]],
-      documentNumber: ['', [Validators.required]],
-      notes: [''],
-      phone: [''],
-      customerAcquisitionId: [''],
-      email: ['', [Validators.required, Validators.email]],
-      address: ['', [Validators.required]],
+      name: [name ?? null, [Validators.required]],
+      lastName: [lastName ?? null, [Validators.required]],
+      businessName: [businessName ?? null, [Validators.required]],
+      documentType: [
+        documentType ?? eDocumentType.Venezolano,
+        [Validators.required],
+      ],
+      documentNumber: [documentNumber ?? null, [Validators.required]],
+      notes: [notes ?? null],
+      codePhone: [codePhone ?? null],
+      phone: [phoneNumber ?? null],
+      customerAcquisitionId: [customerAcquisitionId ?? null],
+      email: [email ?? null, [Validators.required, Validators.email]],
+      address: [address ?? null, [Validators.required]],
       type: [
         { value: eEntityType.Supplier, disabled: true },
         [Validators.required],
@@ -94,30 +223,208 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     });
   }
 
-  public handleOpen(): void {
-    this.isVisible = true;
+  private mapEntities(entities: IEntity[] = [], isSearch = false) {
+    const suppliersMapped = entities.map((e) => ({
+      key: e.objectID || '',
+      fullName: `${e.name} ${e.lastName}`,
+      businessName: e.businessName,
+      identificationDocument: e.identificationDocument,
+      email: e.email,
+      phone: e.phone,
+    }));
+
+    if (!isSearch) {
+      this.entities.push(...entities);
+      this.entitiesBackup.push(...entities);
+      this.suppliers = [...this.suppliers, ...suppliersMapped];
+    } else {
+      this.entities = [...entities];
+      this.suppliers = [...suppliersMapped];
+    }
+
+    this.isLoading = false;
+    this.isLoadingInfiniteScroll = false;
   }
 
   public handleClose(): void {
-    this.isVisible = false;
+    this.openDrawer = false;
+    this.selected = undefined;
+    this.isSubmitting = false;
   }
 
-  public handleSubmit() {
-    console.log(this.form.getRawValue());
-    return;
-    if (this.form.invalid) return;
+  public handleOpen() {
+    this.openDrawer = true;
+  }
 
+  // async crearVarios() {
+  //   const authToken = await this.authService.getIdTokenResult();
+  //   [...Array(50).keys()].forEach((index) => {
+  //     const body = {
+  //       authToken,
+  //       entity: {
+  //         name: `Nombre ${index + 1}`,
+  //         lastName: `Apellido ${index + 1}`,
+  //         businessName: `Empresa ${index + 1}`,
+  //         identificationDocument: `${eDocumentType.Venezolano}-00000${
+  //           index + 1
+  //         }`,
+  //         phone: `+58-000000${index + 1}`,
+  //         notes: '',
+  //         customerAcquisitionId: '',
+  //         email: `email_${index + 1}@correo.com`,
+  //         address: `Direccion ${index + 1}`,
+  //         type: eEntityType.Supplier,
+  //       },
+  //     };
+
+  //     this.create(body);
+  //   });
+  // }
+
+  public async handleSubmit() {
+    if (this.form.invalid) {
+      this.notification.info(
+        'Nuevo registro',
+        'Debes completar los campos marcados con un *'
+      );
+      return;
+    }
     this.isSubmitting = true;
 
-    const { documentType, documentNumber, ...rest } = this.form.getRawValue();
+    const authToken = await this.authService.getIdTokenResult();
 
-    const body: IEntityCreate = {
-      ...(rest as IEntityCreate),
-      identificationDocument: `${documentType}-${documentNumber}`,
-    };
+    const { documentType, documentNumber, phone, codePhone, ...rest } =
+      this.form.getRawValue();
 
-    this.suppliersService
-      .create(body)
-      .subscribe(() => (this.isSubmitting = false));
+    if (this.selected) {
+      const body: { entity: IEntityUpdate; authToken: string } = {
+        entity: {
+          ...(rest as IEntityUpdate),
+          identificationDocument: `${documentType}-${documentNumber}`,
+          phone: `${codePhone}-${phone}`,
+        },
+        authToken,
+      };
+      return this.update(this.selected?.objectID || '', body);
+    } else {
+      const body: { entity: IEntityCreate; authToken: string } = {
+        entity: {
+          ...(rest as IEntityCreate),
+          identificationDocument: `${documentType}-${documentNumber}`,
+          phone: `${codePhone}-${phone}`,
+        },
+        authToken,
+      };
+      return this.create(body);
+    }
+  }
+
+  private update(id: string, body: any) {
+    this.entitiesService.update(id, body).subscribe({
+      next: () => {
+        this.handleClose();
+        this.notification.success(
+          'Actualizar proveedor',
+          'Se ha actualizado satisfactoriamente'
+        );
+      },
+      error: (err) => {
+        if (err.status > 0) {
+          this.notification.error(`Error ${err.status}`, err.error);
+          this.isSubmitting = false;
+        }
+      },
+    });
+  }
+
+  private create(body: any) {
+    this.entitiesService.create(body).subscribe({
+      next: () => {
+        this.handleClose();
+        this.notification.success(
+          'Crear proveedor',
+          'Se ha creado satisfactoriamente'
+        );
+      },
+      error: (err) => {
+        if (err.status > 0) {
+          this.notification.error(`Error ${err.status}`, err.error);
+          this.isSubmitting = false;
+        }
+      },
+    });
+  }
+
+  private async delete(id: string) {
+    this.isLoading = true;
+    const authToken = await this.authService.getIdTokenResult();
+    this.entitiesService.delete(id, authToken).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.notification.success(
+          'Eliminar proveedor',
+          'Se ha eliminado satisfactoriamente'
+        );
+      },
+      error: (err) => {
+        if (err.status > 0) {
+          this.notification.error(`Error ${err.status}`, err.error);
+          this.isLoading = false;
+        }
+      },
+    });
+  }
+
+  public handleAction({ id, action }: IActionResponse) {
+    if (action === eActions.Delete) {
+      const selected = this.entities.find((e) => e.objectID === id);
+      if (selected) {
+        this.modal.confirm({
+          nzTitle: 'Eliminar proveedor',
+          nzContent: `¿Estás seguro que quieres eliminar a ${selected.name} ${selected.lastName} de tus proveedores?`,
+          nzOkText: 'Sí, eliminar',
+          nzOkType: 'primary',
+          nzOkDanger: true,
+          nzOnOk: () => this.delete(id),
+          nzCancelText: 'No, cancelar',
+        });
+      }
+    }
+
+    if (action === eActions.Update) {
+      this.selected = this.entities.find((e) => e.objectID === id);
+
+      this.buildForm();
+      this.handleOpen();
+      return;
+    }
+  }
+
+  public async handleSearch(offset?: number, isSearch = false) {
+    this.isLoading = true;
+
+    if (!this.query.length) {
+      this.mapEntities(this.entitiesBackup);
+      this.query = '';
+    }
+
+    try {
+      const { hits } = await index.search(this.query, {
+        offset,
+        length: this.requestLimit,
+        filters: 'isDeleted=0',
+      });
+
+      this.mapEntities(hits as IEntity[], isSearch);
+    } catch (err: any) {
+      this.isLoading = false;
+      this.notification.error(`Error ${err.status}`, err.message);
+    }
+  }
+
+  public handleClearSearch(isSearch?: boolean) {
+    this.query = '';
+    this.isLoading = true;
+    this.mapEntities(this.entitiesBackup, isSearch);
   }
 }
