@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  HostListener,
   OnDestroy,
   OnInit,
   inject,
@@ -39,7 +38,6 @@ import { eActions } from '@enums/actions.enum';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { eDocumentType } from '@enums/document-type.enum';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { index } from 'src/environments/configurations';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
@@ -57,7 +55,6 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzModalModule,
     ReactiveFormsModule,
     NzDrawerModule,
-    NzSpinModule,
     FormsModule,
     NzIconModule,
   ],
@@ -80,6 +77,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     type: eEntityType.Supplier,
     requestLimit: this.requestLimit,
   };
+  private userAction?: eActions;
 
   public isLoading = true;
   public suppliers: IEntityColumn[] = [];
@@ -124,28 +122,6 @@ export class SuppliersComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   public form: FormGroup<IEntityControls>;
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll() {
-    const scrollPosition = window.scrollY;
-    const windowHeight = window.innerHeight;
-    const documentHeight =
-      document.documentElement.scrollHeight ?? document.body.scrollHeight;
-
-    if (scrollPosition + windowHeight >= documentHeight) {
-      if (this.entities.length && !this.allDataUploaded) {
-        this.isLoadingInfiniteScroll = true;
-        const lastRequest = this.entities[this.entities.length - 1].createdAt;
-        this.getEntityProps = { ...this.getEntityProps, lastRequest };
-        if (!this.query.length) {
-          this.loadData();
-        } else {
-          const offset = this.entities.length;
-          this.handleSearch(offset);
-        }
-      }
-    }
-  }
-
   constructor() {
     this.buildForm();
   }
@@ -165,6 +141,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
   }
 
   public loadData() {
+    this.isLoading = true;
     const getData = this.entitiesService
       .getList(this.getEntityProps)
       .subscribe({
@@ -234,9 +211,48 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     }));
 
     if (!isSearch) {
-      this.entities.push(...entities);
-      this.entitiesBackup.push(...entities);
-      this.suppliers = [...this.suppliers, ...suppliersMapped];
+      if (this.userAction) {
+        if (this.userAction === eActions.Create) {
+          const newEntity = entities[0];
+          this.entities.push(newEntity);
+          this.entitiesBackup.push(newEntity);
+          this.suppliers = [suppliersMapped[0], ...this.suppliers];
+        } else if (this.userAction === eActions.Update) {
+          const recordUpdated = entities.find(
+            (e) => e.objectID === this.selected?.objectID
+          );
+
+          if (recordUpdated) {
+            const recordUpdatedMapped = suppliersMapped.find(
+              (s) => s.key === recordUpdated?.objectID
+            );
+
+            this.entities = this.entities.map((e) =>
+              e.objectID === recordUpdated.objectID ? recordUpdated : e
+            );
+            this.entitiesBackup = this.entitiesBackup.map((e) =>
+              e.objectID === recordUpdated.objectID ? recordUpdated : e
+            );
+            this.suppliers = this.suppliers.map((s) =>
+              s.key === recordUpdatedMapped?.key ? recordUpdatedMapped : s
+            );
+          }
+        } else if (this.userAction === eActions.Delete) {
+          this.entities = this.entities.filter(
+            (e) => e.objectID !== this.selected?.objectID
+          );
+          this.entitiesBackup = this.entitiesBackup.filter(
+            (e) => e.objectID !== this.selected?.objectID
+          );
+          this.suppliers = this.suppliers.filter(
+            (e) => e.key !== this.selected?.objectID
+          );
+        }
+      } else {
+        this.entities.push(...entities);
+        this.entitiesBackup.push(...entities);
+        this.suppliers = [...this.suppliers, ...suppliersMapped];
+      }
     } else {
       this.entities = [...entities];
       this.suppliers = [...suppliersMapped];
@@ -244,16 +260,34 @@ export class SuppliersComponent implements OnInit, OnDestroy {
 
     this.isLoading = false;
     this.isLoadingInfiniteScroll = false;
+    this.userAction = undefined;
+    this.selected = undefined;
   }
 
   public handleClose(): void {
     this.openDrawer = false;
-    this.selected = undefined;
     this.isSubmitting = false;
+    if (!this.userAction) this.selected = undefined;
   }
 
   public handleOpen() {
+    this.buildForm();
     this.openDrawer = true;
+  }
+
+  public handleScroll() {
+    if (this.entities.length && !this.allDataUploaded) {
+      console.log('entro');
+      this.isLoadingInfiniteScroll = true;
+      const lastRequest = this.entities[this.entities.length - 1].createdAt;
+      this.getEntityProps = { ...this.getEntityProps, lastRequest };
+      if (!this.query.length) {
+        this.loadData();
+      } else {
+        const offset = this.entities.length;
+        this.handleSearch(offset);
+      }
+    }
   }
 
   // async crearVarios() {
@@ -320,6 +354,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
   }
 
   private update(id: string, body: any) {
+    this.userAction = eActions.Update;
     this.entitiesService.update(id, body).subscribe({
       next: () => {
         this.handleClose();
@@ -338,6 +373,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
   }
 
   private create(body: any) {
+    this.userAction = eActions.Create;
     this.entitiesService.create(body).subscribe({
       next: () => {
         this.handleClose();
@@ -356,6 +392,8 @@ export class SuppliersComponent implements OnInit, OnDestroy {
   }
 
   private async delete(id: string) {
+    this.userAction = eActions.Delete;
+    this.selected = this.entities.find((e) => e.objectID === id);
     this.isLoading = true;
     const authToken = await this.authService.getIdTokenResult();
     this.entitiesService.delete(id, authToken).subscribe({
@@ -408,6 +446,8 @@ export class SuppliersComponent implements OnInit, OnDestroy {
       this.query = '';
     }
 
+    this.allDataUploaded = false;
+
     try {
       const { hits } = await index.search(this.query, {
         offset,
@@ -415,7 +455,13 @@ export class SuppliersComponent implements OnInit, OnDestroy {
         filters: 'isDeleted=0',
       });
 
-      this.mapEntities(hits as IEntity[], isSearch);
+      if (hits.length) {
+        this.mapEntities(hits as IEntity[], isSearch);
+      } else {
+        this.allDataUploaded = true;
+        this.isLoading = false;
+        this.isLoadingInfiniteScroll = false;
+      }
     } catch (err: any) {
       this.isLoading = false;
       this.notification.error(`Error ${err.status}`, err.message);

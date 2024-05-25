@@ -55,6 +55,7 @@ export class ButtonComponent implements OnInit {
   @Input() variant: 'solid' | 'outline' | 'clear' = 'solid';
   @Input() color: 'orange' | 'rose' | 'green' | 'gray' = 'orange';
   @Input({ transform: booleanAttribute }) isLoading = false;
+  @Input({ transform: booleanAttribute }) disabled = false;
   @Output() onSubmit: EventEmitter<void> = new EventEmitter<void>();
 
   public colorClass: string;

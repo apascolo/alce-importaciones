@@ -1,10 +1,10 @@
-<div class="flex justify-end mb-5">
-  <div class="me-3 w-1/2 relative">
+<div class="flex flex-wrap justify-end mb-5">
+  <div class="sm:me-3 w-full mb-2 sm:w-1/2 sm:mb-0 relative">
     <input
       [(ngModel)]="query"
       (keyup.enter)="handleSearch(undefined, true)"
       type="search"
-      class="w-full h-full py-1 px-2 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6 rounded-md"
+      class="w-full h-full py-2 sm:py-1 px-2 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6 rounded-md"
       placeholder="Buscar por nombre o empresa"
     />
     @if (query.length) {
@@ -17,21 +17,19 @@
     ></span>
     }
   </div>
-  <app-button name="Nuevo proveedor" color="gray" (onSubmit)="handleOpen()" />
+  <div class="flex-none w-full sm:w-auto">
+    <app-button name="Nuevo proveedor" color="gray" (onSubmit)="handleOpen()" />
+  </div>
 </div>
 
 <app-datatable
   [data]="suppliers"
   [columns]="columns"
   [isLoading]="isLoading"
+  [isLoadingInfiniteScroll]="isLoadingInfiniteScroll"
   (onAction)="handleAction($event)"
+  (onScroll)="handleScroll()"
 />
-
-@if (isLoadingInfiniteScroll) {
-<div class="py-8">
-  <nz-spin [nzSpinning]="isLoadingInfiniteScroll" nzTip="Cargando..." />
-</div>
-}
 
 <nz-drawer
   [nzBodyStyle]="{ overflow: 'auto' }"
@@ -112,14 +110,14 @@
           color="gray"
           variant="outline"
           name="Cancelar"
-          [isLoading]="isLoading"
+          [disabled]="isSubmitting"
           (onSubmit)="handleClose()"
         />
       </div>
       <div class="w-32">
         <app-button
           color="orange"
-          [isLoading]="isLoading"
+          [isLoading]="isSubmitting"
           [name]="selected ? 'Actualizar' : 'Crear'"
           (onSubmit)="handleSubmit()"
         />
