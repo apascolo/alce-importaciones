@@ -289,31 +289,6 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     }
   }
 
-  // async crearVarios() {
-  //   const authToken = await this.authService.getIdTokenResult();
-  //   [...Array(50).keys()].forEach((index) => {
-  //     const body = {
-  //       authToken,
-  //       entity: {
-  //         name: `Nombre ${index + 1}`,
-  //         lastName: `Apellido ${index + 1}`,
-  //         businessName: `Empresa ${index + 1}`,
-  //         identificationDocument: `${eDocumentType.Venezolano}-00000${
-  //           index + 1
-  //         }`,
-  //         phone: `+58-000000${index + 1}`,
-  //         notes: '',
-  //         customerAcquisitionId: '',
-  //         email: `email_${index + 1}@correo.com`,
-  //         address: `Direccion ${index + 1}`,
-  //         type: eEntityType.Supplier,
-  //       },
-  //     };
-
-  //     this.create(body);
-  //   });
-  // }
-
   public async handleSubmit() {
     if (this.form.invalid) {
       this.notification.info(
@@ -392,7 +367,6 @@ export class SuppliersComponent implements OnInit, OnDestroy {
 
   private async delete(id: string) {
     this.userAction = eActions.Delete;
-    this.selected = this.entities.find((e) => e.objectID === id);
     this.isLoading = true;
     const authToken = await this.authService.getIdTokenResult();
     this.entitiesService.delete(id, authToken).subscribe({
@@ -414,11 +388,11 @@ export class SuppliersComponent implements OnInit, OnDestroy {
 
   public handleAction({ id, action }: IActionResponse) {
     if (action === eActions.Delete) {
-      const selected = this.entities.find((e) => e.objectID === id);
-      if (selected) {
+      this.selected = this.entities.find((e) => e.objectID === id);
+      if (this.selected) {
         this.modal.confirm({
           nzTitle: 'Eliminar proveedor',
-          nzContent: `¿Estás seguro que quieres eliminar a ${selected.name} ${selected.lastName} de tus proveedores?`,
+          nzContent: `¿Estás seguro que quieres eliminar a ${this.selected.name} ${this.selected.lastName} de tus proveedores?`,
           nzOkText: 'Sí, eliminar',
           nzOkType: 'primary',
           nzOkDanger: true,
