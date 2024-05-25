@@ -277,7 +277,6 @@ export class SuppliersComponent implements OnInit, OnDestroy {
 
   public handleScroll() {
     if (this.entities.length && !this.allDataUploaded) {
-      console.log('entro');
       this.isLoadingInfiniteScroll = true;
       const lastRequest = this.entities[this.entities.length - 1].createdAt;
       this.getEntityProps = { ...this.getEntityProps, lastRequest };
