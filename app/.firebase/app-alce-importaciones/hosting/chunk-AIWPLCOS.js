@@ -1,0 +1,1 @@
+var i=function(r){return r.Root="",r.Auth="auth",r.Login="login",r.Products="products",r.Categories="categories",r.Users="users",r.Operations="operations",r.Suppliers="suppliers",r.Customers="customers",r}(i||{});export{i as a};

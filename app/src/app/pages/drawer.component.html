@@ -2,41 +2,23 @@
   <nz-sider nzCollapsible nzWidth="200px">
     <div class="logo"></div>
     <ul nz-menu nzTheme="dark" nzMode="inline">
+      @for (menuItem of menuItems; track menuItem.path) {
       <li
-        (click)="setTitle(eRoutes.Root)"
         nz-menu-item
-        [routerLink]="eRoutes.Root"
+        (click)="setTitle(menuItem.path)"
+        [routerLink]="menuItem.path"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        <span nz-icon nzType="bar-chart"></span>
-        <span>{{ titlePages[eRoutes.Root] }}</span>
+        <span nz-icon [nzType]="menuItem.icon"></span>
+        <span>{{ menuItem.name }}</span>
       </li>
-      <li
-        (click)="setTitle(eRoutes.Products)"
-        nz-menu-item
-        [routerLink]="eRoutes.Products"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <span nz-icon nzType="inbox"></span>
-        <span>{{ titlePages[eRoutes.Products] }}</span>
-      </li>
-      <li
-        (click)="setTitle(eRoutes.Users)"
-        nz-menu-item
-        [routerLink]="eRoutes.Users"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <span nz-icon nzType="team"></span>
-        <span>{{ titlePages[eRoutes.Users] }}</span>
-      </li>
+      }
     </ul>
   </nz-sider>
   <nz-layout>
-    <nz-header class="flex items-center justify-between">
-      <h1 class="text-lg px-3 font-medium leading-[64px] text-gray-900">
+    <nz-header class="flex items-center justify-between mb-5 bg-orange-600 p-0">
+      <h1 class="text-lg px-3 font-medium leading-[64px] text-white">
         {{ title }}
       </h1>
       <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
@@ -44,11 +26,11 @@
       </a>
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
-          <li nz-menu-item>
+          <li nz-menu-item class="hover:bg-gray-200">
             <span nz-icon nzType="user" class="me-2"></span>
             Mi perfil
           </li>
-          <li nz-menu-item (click)="logout()">
+          <li nz-menu-item class="hover:bg-gray-200" (click)="logout()">
             <span nz-icon nzType="logout" class="me-2"></span>
             Salir
           </li>

@@ -19,7 +19,13 @@ export class AuthService {
     return authState(this.auth);
   }
   async getIdTokenResult() {
-    return await this.auth.currentUser?.getIdTokenResult();
+    try {
+      const authToken = await this.auth.currentUser?.getIdTokenResult();
+      return authToken ? authToken.token : '';
+    } catch (error) {
+      console.log(error);
+      return '';
+    }
   }
 
   login({ email, password }: ILogin) {

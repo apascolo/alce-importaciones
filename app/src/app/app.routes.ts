@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { eRoutes } from '@enums/index';
 import {
   canActivate,
   redirectLoggedInTo,
   redirectUnauthorizedTo,
 } from '@angular/fire/auth-guard';
+import { eRoutes } from '@enums/routes.enum';
 
 const redirectToLogin = () => redirectUnauthorizedTo(['/auth/login']);
 const redirectToDashboard = () => redirectLoggedInTo(['/']);
@@ -51,6 +51,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/operations/operations.component').then(
             (m) => m.OperationsComponent
+          ),
+        ...canActivate(redirectToLogin),
+      },
+      {
+        path: eRoutes.Suppliers,
+        loadComponent: () =>
+          import('./pages/suppliers/suppliers.component').then(
+            (m) => m.SuppliersComponent
           ),
         ...canActivate(redirectToLogin),
       },

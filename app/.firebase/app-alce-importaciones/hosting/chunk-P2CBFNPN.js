@@ -1,0 +1,2 @@
+import{Qb as a,Rb as r,bd as s,hc as o,mc as c,za as i}from"./chunk-K3OKKPLL.js";var l=(()=>{let e=class e{};e.\u0275fac=function(n){return new(n||e)},e.\u0275cmp=i({type:e,selectors:[["app-categories"]],standalone:!0,features:[c],decls:3,vars:0,template:function(n,p){n&1&&(a(0,"p"),o(1,"categories works!"),r(),o(2,`,
+`))},dependencies:[s],changeDetection:0});let t=e;return t})();export{l as CategoriesComponent};

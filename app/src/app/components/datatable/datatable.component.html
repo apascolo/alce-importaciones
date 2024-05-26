@@ -1,0 +1,151 @@
+@if (usePagination) {
+<div class="container-list" id="table" (scroll)="onTableScroll($event)">
+  <nz-table
+    [nzData]="data"
+    #table
+    class="datatable"
+    nzShowPagination
+    nzShowSizeChanger
+    (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+    [nzLoading]="isLoading"
+  >
+    <thead>
+      <tr>
+        @for (column of columns; track column.name) {
+        <th [nzWidth]="column.width">{{ column.name }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of table.data; track row.key) {
+      <tr
+        class="cursor-pointer"
+        (dblclick)="handleAction(row.key, eActions.Update)"
+      >
+        <td>{{ row.fullName }}</td>
+        <td>{{ row.businessName }}</td>
+        <td>{{ row.identificationDocument }}</td>
+        <td>{{ row.email }}</td>
+        <td>{{ row.phone }}</td>
+        <td class="text-center">
+          <a
+            nz-dropdown
+            nzTrigger="click"
+            [nzDropdownMenu]="menu"
+            class="text-gray-900"
+          >
+            <span
+              nz-icon
+              nzType="ellipsis"
+              nzTheme="outline"
+              [nzRotate]="90"
+              class="text-lg"
+            ></span>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu>
+              <li
+                nz-menu-item
+                class="hover:bg-gray-200"
+                (click)="handleAction(row.key, eActions.Update)"
+              >
+                <span nz-icon nzType="edit" class="me-2"></span>
+                Editar
+              </li>
+              <li
+                nz-menu-item
+                class="bg-rose-600 hover:bg-rose-800 text-white"
+                (click)="handleAction(row.key, eActions.Delete)"
+              >
+                <span nz-icon nzType="delete" class="me-2"></span>
+                Eliminar
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+
+  @if (isLoadingInfiniteScroll) {
+  <div class="py-8">
+    <nz-spin [nzSpinning]="isLoadingInfiniteScroll" nzTip="Cargando..." />
+  </div>
+  }
+</div>
+} @else {
+<div class="container-list" id="table" (scroll)="onTableScroll($event)">
+  <nz-table
+    [nzData]="data"
+    #table
+    class="datatable"
+    [nzShowPagination]="false"
+    [nzLoading]="isLoading"
+  >
+    <thead>
+      <tr>
+        @for (column of columns; track column.key) {
+        <th [nzWidth]="column.width">{{ column.name }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of data; track row.key) {
+      <tr
+        class="cursor-pointer"
+        (dblclick)="handleAction(row.key, eActions.Update)"
+      >
+        @for (column of columns; track column.key) { @if (column.key !==
+        'actions') {
+        <td>{{ row[column.key] }}</td>
+        } @else {
+        <td class="text-center">
+          <a
+            nz-dropdown
+            nzTrigger="click"
+            [nzDropdownMenu]="menu"
+            class="text-gray-900"
+          >
+            <span
+              nz-icon
+              nzType="ellipsis"
+              nzTheme="outline"
+              [nzRotate]="90"
+              class="text-lg"
+            ></span>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu>
+              <li
+                nz-menu-item
+                class="hover:bg-gray-200"
+                (click)="handleAction(row.key, eActions.Update)"
+              >
+                <span nz-icon nzType="edit" class="me-2"></span>
+                Editar
+              </li>
+              <li
+                nz-menu-item
+                class="bg-rose-600 hover:bg-rose-800 text-white"
+                (click)="handleAction(row.key, eActions.Delete)"
+              >
+                <span nz-icon nzType="delete" class="me-2"></span>
+                Eliminar
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </td>
+        } }
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+
+  @if (isLoadingInfiniteScroll) {
+  <div class="py-8">
+    <nz-spin [nzSpinning]="isLoadingInfiniteScroll" nzTip="Cargando..." />
+  </div>
+  }
+</div>
+}
