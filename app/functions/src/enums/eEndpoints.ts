@@ -2,5 +2,7 @@ export enum eEndpoints {
   Root = '/',
   CreateUserAdmin = '/admin/createUserAdmin',
   SetStatistics = '/admin/setStatistics',
-  Entities = '/entities',
+  Suppliers = '/suppliers',
+  Customers = '/customers',
+  Roles = '/roles',
 }

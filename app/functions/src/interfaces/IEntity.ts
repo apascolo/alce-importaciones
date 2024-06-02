@@ -15,7 +15,7 @@ export interface IEntity extends IFullAudited, IIdentification {
   type: eEntityType;
 }
 
-export interface IEntityCreate {
+export interface IEntityCreate extends IFullAudited {
   name: string;
   lastName: string;
   businessName?: string | null | null;

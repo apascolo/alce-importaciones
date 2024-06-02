@@ -6,4 +6,6 @@ export type PagesWithTitle =
   | eRoutes.Products
   | eRoutes.Users
   | eRoutes.Customers
-  | eRoutes.Suppliers;
+  | eRoutes.Suppliers
+  | eRoutes.Roles
+  | 'gestionUsuarios';

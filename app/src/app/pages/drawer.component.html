@@ -3,16 +3,42 @@
     <div class="logo"></div>
     <ul nz-menu nzTheme="dark" nzMode="inline">
       @for (menuItem of menuItems; track menuItem.path) {
-      <li
-        nz-menu-item
-        (click)="setTitle(menuItem.path)"
-        [routerLink]="menuItem.path"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <span nz-icon [nzType]="menuItem.icon"></span>
-        <span>{{ menuItem.name }}</span>
-      </li>
+        @if (!menuItem.children?.length) {
+          <li
+            nz-menu-item
+            (click)="setTitle(menuItem.path)"
+            [routerLink]="menuItem.path"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            @if(menuItem.icon){
+              <span nz-icon [nzType]="menuItem.icon"></span>
+            }
+            <span>{{ menuItem.name }}</span>
+          </li>
+        } @else {
+         <li
+            nz-submenu
+            [nzOpen]="menuItem.open"
+            [nzTitle]="menuItem.name"
+            [nzIcon]="menuItem.icon || ''"
+          >
+            @for (child of menuItem.children; track child.path) {
+              <li
+                nz-menu-item
+                (click)="setTitle(child.path)"
+                [routerLink]="child.path"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                @if(child.icon){
+                  <span nz-icon [nzType]="child.icon"></span>
+                }
+                <span>{{ child.name }}</span>
+              </li>
+            }
+          </li>
+        }
       }
     </ul>
   </nz-sider>

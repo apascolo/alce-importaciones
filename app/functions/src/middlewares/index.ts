@@ -1,1 +1,2 @@
-export * from './verifyAdmin';
+export * from './verifySuperAdmin';
+export * from './checkPermissions';

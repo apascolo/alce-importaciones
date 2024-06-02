@@ -1,5 +1,5 @@
 export interface IFullAudited {
-  createdAt?: number;
+  createdAt: number;
   modifiedAt?: number;
   deletedAt?: number | null;
   deleterId?: string | null;

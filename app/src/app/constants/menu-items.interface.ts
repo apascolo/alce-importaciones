@@ -14,9 +14,18 @@ export const menuItems: IMenuItem[] = [
     icon: 'inbox',
   },
   {
-    path: eRoutes.Users,
-    name: titlePages[eRoutes.Users],
+    name: titlePages['gestionUsuarios'],
     icon: 'team',
+    children: [
+      {
+        path: eRoutes.Users,
+        name: titlePages[eRoutes.Users],
+      },
+      {
+        path: eRoutes.Roles,
+        name: titlePages[eRoutes.Roles],
+      },
+    ],
   },
   {
     path: eRoutes.Suppliers,

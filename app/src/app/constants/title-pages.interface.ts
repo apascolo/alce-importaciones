@@ -8,4 +8,6 @@ export const titlePages: Record<PagesWithTitle, string> = {
   [eRoutes.Users]: 'Usuarios',
   [eRoutes.Customers]: 'Clientes',
   [eRoutes.Suppliers]: 'Proveedores',
+  [eRoutes.Roles]: 'Roles',
+  gestionUsuarios: 'Gestión de usuarios',
 };

@@ -25,8 +25,9 @@ import {
   IEntityControls,
   IColumn,
   IGetEntity,
+  IEntityRequest,
 } from '@interfaces/index';
-import { EntitiesService } from '@services/entities.service';
+import { SuppliersService } from '@services/suppliers.service';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { Subscription } from 'rxjs';
 import { DocumentFieldComponent } from '@components/document-field/document-field.component';
@@ -63,7 +64,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SuppliersComponent implements OnInit, OnDestroy {
-  private entitiesService = inject(EntitiesService);
+  private suppliersService = inject(SuppliersService);
   private authService = inject(AuthService);
   private notification = inject(NzNotificationService);
   private modal = inject(NzModalService);
@@ -142,7 +143,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
 
   public loadData() {
     this.isLoading = true;
-    const getData = this.entitiesService
+    const getData = this.suppliersService
       .getList(this.getEntityProps)
       .subscribe({
         next: (response) => {
@@ -305,7 +306,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
       this.form.getRawValue();
 
     if (this.selected) {
-      const body: { entity: IEntityUpdate; authToken: string } = {
+      const body: IEntityRequest = {
         entity: {
           ...(rest as IEntityUpdate),
           identificationDocument: `${documentType}-${documentNumber}`,
@@ -315,7 +316,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
       };
       return this.update(this.selected?.objectID || '', body);
     } else {
-      const body: { entity: IEntityCreate; authToken: string } = {
+      const body: IEntityRequest = {
         entity: {
           ...(rest as IEntityCreate),
           identificationDocument: `${documentType}-${documentNumber}`,
@@ -327,9 +328,10 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     }
   }
 
-  private update(id: string, body: any) {
+  private update(id: string, body: IEntityRequest) {
     this.userAction = eActions.Update;
-    this.entitiesService.update(id, body).subscribe({
+
+    this.suppliersService.update(id, body).subscribe({
       next: () => {
         this.handleClose();
         this.notification.success(
@@ -346,9 +348,9 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     });
   }
 
-  private create(body: any) {
+  private create(body: IEntityRequest) {
     this.userAction = eActions.Create;
-    this.entitiesService.create(body).subscribe({
+    this.suppliersService.create(body).subscribe({
       next: () => {
         this.handleClose();
         this.notification.success(
@@ -369,7 +371,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     this.userAction = eActions.Delete;
     this.isLoading = true;
     const authToken = await this.authService.getIdTokenResult();
-    this.entitiesService.delete(id, authToken).subscribe({
+    this.suppliersService.delete(id, authToken).subscribe({
       next: () => {
         this.isLoading = false;
         this.notification.success(

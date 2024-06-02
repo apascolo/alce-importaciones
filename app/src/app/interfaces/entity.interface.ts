@@ -77,3 +77,8 @@ export interface IGetEntity {
   requestLimit?: number;
   lastRequest?: number;
 }
+
+export interface IEntityRequest {
+  entity: IEntityCreate | IEntityUpdate;
+  authToken: string;
+}
