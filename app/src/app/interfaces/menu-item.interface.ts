@@ -1,7 +1,9 @@
 import { PagesWithTitle } from '@customTypes/index';
 
 export interface IMenuItem {
-  path: PagesWithTitle;
+  path?: PagesWithTitle;
   name: string;
-  icon: string;
+  icon?: string;
+  open?: boolean;
+  children?: IMenuItem[];
 }

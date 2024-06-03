@@ -1,3 +1,4 @@
+import { RolesComponent } from './pages/roles/roles.component';
 import { Routes } from '@angular/router';
 import {
   canActivate,
@@ -60,6 +61,12 @@ export const routes: Routes = [
           import('./pages/suppliers/suppliers.component').then(
             (m) => m.SuppliersComponent
           ),
+        ...canActivate(redirectToLogin),
+      },
+      {
+        path: eRoutes.Roles,
+        loadComponent: () =>
+          import('./pages/roles/roles.component').then((m) => m.RolesComponent),
         ...canActivate(redirectToLogin),
       },
     ],

@@ -1,0 +1,15 @@
+<div class="flex flex-wrap justify-end mb-5">
+  <div class="flex-none w-full md:w-1/2 lg:w-1/4 xl:w-1/6 md:ws-auto">
+    <app-button name="Nuevo rol" color="gray" (onSubmit)="handleOpenDrawer()" />
+  </div>
+</div>
+
+<app-datatable [data]="rolesDataTable" [columns]="columns" [isLoading]="isLoading" (onAction)="handleAction($event)" />
+
+<app-drawer-role
+  [openDrawer]="openDrawer"
+  [isSubmitting]="isSubmitting"
+  [selected]="selected"
+  (onClose)="handleCloseDrawer()"
+  (onSubmit)="handleSubmit($event)"
+/>

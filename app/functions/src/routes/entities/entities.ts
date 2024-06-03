@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { TOTALSDB } from '../../constants/totalsDb';
+import { eTotalsDb } from '../../enums/eTotalsDb';
 import { eCollentions } from '../../enums/eCollections';
 import { eEntityType } from '../../enums/eEntityType';
 import { IEntityCreate, IEntity, IEntityUpdate } from '../../interfaces/IEntity';
@@ -47,7 +47,7 @@ const createEntity = async (req: Request, res: Response) => {
   }
 
   try {
-    const newEntity: Omit<IEntity, 'id'> = {
+    const newEntity: IEntityCreate = {
       name: nameTrim,
       lastName: lastNameTrim,
       businessName: businessNameTrim ?? null,
@@ -88,7 +88,7 @@ const createEntity = async (req: Request, res: Response) => {
 
     const response = await db.collection(eCollentions.Entities).add(newEntity);
 
-    return res.status(201).send({ ...newEntity, id: response.id, objectID: response.id });
+    return res.status(201).send({ ...newEntity, objectID: response.id });
   } catch (error) {
     console.log(error);
     return res.status(500).send(handleError(error));
@@ -160,11 +160,12 @@ const updateEntity = async (req: Request, res: Response) => {
       modifiedAt: Date.now(),
     };
 
-    const entityRef = db.collection(eCollentions.Entities).doc(id);
-    const currentEntity = await entityRef.get();
-    await entityRef.update({ ...currentEntity.data(), ...newEntity });
+    await db
+      .collection(eCollentions.Entities)
+      .doc(id)
+      .update({ ...newEntity });
 
-    return res.send({ ...newEntity, id, objectID: id });
+    return res.send({ ...newEntity, objectID: id });
   } catch (error) {
     console.log(error);
     return res.status(500).send(handleError(error));
@@ -180,7 +181,7 @@ const softDeleteEntity = async (req: Request, res: Response) => {
   const { userId } = req.body as Props;
 
   if (!id || !id.trim().length) {
-    return res.status(400).send('Lo siento, no hemos recibido el id del registro a actualizar');
+    return res.status(400).send('Lo siento, no hemos recibido el id del registro a eliminar');
   }
 
   try {
@@ -210,8 +211,8 @@ const entityCreated = functions.firestore
 
     const data = {} as TotalDB;
 
-    if (entity.type === eEntityType.Customer) data[TOTALSDB.totalCustomers] = 1;
-    if (entity.type === eEntityType.Supplier) data[TOTALSDB.totalSuppliers] = 1;
+    if (entity.type === eEntityType.Customer) data[eTotalsDb.totalCustomers] = 1;
+    if (entity.type === eEntityType.Supplier) data[eTotalsDb.totalSuppliers] = 1;
 
     return await updateTotalDb(data);
   });
@@ -227,8 +228,8 @@ const entityUpdate = functions.firestore
     if (!entity.isDeleted && entityUpdated.isDeleted) {
       const data = {} as TotalDB;
 
-      if (entity.type === eEntityType.Customer) data[TOTALSDB.totalCustomers] = -1;
-      if (entity.type === eEntityType.Supplier) data[TOTALSDB.totalSuppliers] = -1;
+      if (entity.type === eEntityType.Customer) data[eTotalsDb.totalCustomers] = -1;
+      if (entity.type === eEntityType.Supplier) data[eTotalsDb.totalSuppliers] = -1;
 
       return await updateTotalDb(data);
     }
@@ -236,8 +237,8 @@ const entityUpdate = functions.firestore
     if (entity.isDeleted && !entityUpdated.isDeleted) {
       const data = {} as TotalDB;
 
-      if (entity.type === eEntityType.Customer) data[TOTALSDB.totalCustomers] = 1;
-      if (entity.type === eEntityType.Supplier) data[TOTALSDB.totalSuppliers] = 1;
+      if (entity.type === eEntityType.Customer) data[eTotalsDb.totalCustomers] = 1;
+      if (entity.type === eEntityType.Supplier) data[eTotalsDb.totalSuppliers] = 1;
 
       return await updateTotalDb(data);
     }

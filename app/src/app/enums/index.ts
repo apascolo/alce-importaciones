@@ -5,3 +5,4 @@ export { eEntityType } from './entity-type.enum';
 export { eNotificationType } from './notification-type.enum';
 export { eRoles } from './roles.enum';
 export { eRoutes } from './routes.enum';
+export { ePermissions } from './permissions.enum';

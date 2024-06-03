@@ -45,14 +45,26 @@ export class DrawerComponent implements OnInit {
 
   private router = inject(Router);
   private authService = inject(AuthService);
+  private urlRoute: PagesWithTitle;
 
   public ngOnInit(): void {
     this.setTitle();
+    this.checkMenuItemOpen();
+  }
+
+  private checkMenuItemOpen() {
+    for (const menuItem of this.menuItems) {
+      const { children } = menuItem;
+      if (children?.length) {
+        const open = children.some((c) => c.path === this.urlRoute);
+        Object.assign(menuItem, { open });
+      }
+    }
   }
 
   public setTitle(route?: PagesWithTitle) {
-    const title: PagesWithTitle =
-      route ?? (this.router.url.split('/')[1] as PagesWithTitle);
+    this.urlRoute = this.router.url.split('/')[1] as PagesWithTitle;
+    const title: PagesWithTitle = route ?? this.urlRoute;
 
     this.title = this.titlePages[title];
   }

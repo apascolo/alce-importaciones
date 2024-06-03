@@ -8,4 +8,5 @@ export enum eRoutes {
   Operations = 'operations',
   Suppliers = 'suppliers',
   Customers = 'customers',
+  Roles = 'roles',
 }

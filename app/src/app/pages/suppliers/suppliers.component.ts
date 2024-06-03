@@ -1,18 +1,6 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-  inject,
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-  FormsModule,
-} from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { ButtonComponent } from '@components/button/button.component';
 import { PhoneFieldComponent } from '@components/phone-field/phone-field.component';
 import { DatatableComponent } from '@components/datatable/datatable.component';
@@ -25,8 +13,9 @@ import {
   IEntityControls,
   IColumn,
   IGetEntity,
+  IEntityRequest,
 } from '@interfaces/index';
-import { EntitiesService } from '@services/entities.service';
+import { SuppliersService } from '@services/suppliers.service';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { Subscription } from 'rxjs';
 import { DocumentFieldComponent } from '@components/document-field/document-field.component';
@@ -63,12 +52,12 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SuppliersComponent implements OnInit, OnDestroy {
-  private entitiesService = inject(EntitiesService);
+  private suppliersService = inject(SuppliersService);
   private authService = inject(AuthService);
   private notification = inject(NzNotificationService);
   private modal = inject(NzModalService);
 
-  private subscriptions: Subscription[] = [];
+  private subscriptions: Subscription = new Subscription();
   private entities: IEntity[] = [];
   private entitiesBackup: IEntity[] = [];
   private requestLimit = 15;
@@ -127,8 +116,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (this.subscriptions.length)
-      this.subscriptions.forEach((s) => s.unsubscribe());
+    this.subscriptions.unsubscribe;
   }
 
   public ngOnInit(): void {
@@ -142,18 +130,15 @@ export class SuppliersComponent implements OnInit, OnDestroy {
 
   public loadData() {
     this.isLoading = true;
-    const getData = this.entitiesService
-      .getList(this.getEntityProps)
-      .subscribe({
-        next: (response) => {
-          this.allDataUploaded = response.length === 0;
-          this.mapEntities(response);
-        },
-        error: (err) =>
-          this.notification.error(`Error ${err.status}`, err.error),
-      });
+    const getData = this.suppliersService.getList(this.getEntityProps).subscribe({
+      next: response => {
+        this.allDataUploaded = response.length === 0;
+        this.mapEntities(response);
+      },
+      error: err => this.notification.error(`Error ${err.status}`, err.error),
+    });
 
-    this.subscriptions.push(getData);
+    this.subscriptions.add(getData);
   }
 
   private buildForm() {
@@ -182,10 +167,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
       name: [name ?? null, [Validators.required]],
       lastName: [lastName ?? null, [Validators.required]],
       businessName: [businessName ?? null, [Validators.required]],
-      documentType: [
-        documentType ?? eDocumentType.Venezolano,
-        [Validators.required],
-      ],
+      documentType: [documentType ?? eDocumentType.Venezolano, [Validators.required]],
       documentNumber: [documentNumber ?? null, [Validators.required]],
       notes: [notes ?? null],
       codePhone: [codePhone ?? null],
@@ -193,15 +175,12 @@ export class SuppliersComponent implements OnInit, OnDestroy {
       customerAcquisitionId: [customerAcquisitionId ?? null],
       email: [email ?? null, [Validators.required, Validators.email]],
       address: [address ?? null, [Validators.required]],
-      type: [
-        { value: eEntityType.Supplier, disabled: true },
-        [Validators.required],
-      ],
+      type: [{ value: eEntityType.Supplier, disabled: true }, [Validators.required]],
     });
   }
 
   private mapEntities(entities: IEntity[] = [], isSearch = false) {
-    const suppliersMapped = entities.map((e) => ({
+    const suppliersMapped = entities.map(e => ({
       key: e.objectID || '',
       fullName: `${e.name} ${e.lastName}`,
       businessName: e.businessName,
@@ -218,35 +197,21 @@ export class SuppliersComponent implements OnInit, OnDestroy {
           this.entitiesBackup.push(newEntity);
           this.suppliers = [suppliersMapped[0], ...this.suppliers];
         } else if (this.userAction === eActions.Update) {
-          const recordUpdated = entities.find(
-            (e) => e.objectID === this.selected?.objectID
-          );
+          const recordUpdated = entities.find(e => e.objectID === this.selected?.objectID);
 
           if (recordUpdated) {
-            const recordUpdatedMapped = suppliersMapped.find(
-              (s) => s.key === recordUpdated?.objectID
-            );
+            const recordUpdatedMapped = suppliersMapped.find(s => s.key === recordUpdated?.objectID);
 
-            this.entities = this.entities.map((e) =>
+            this.entities = this.entities.map(e => (e.objectID === recordUpdated.objectID ? recordUpdated : e));
+            this.entitiesBackup = this.entitiesBackup.map(e =>
               e.objectID === recordUpdated.objectID ? recordUpdated : e
             );
-            this.entitiesBackup = this.entitiesBackup.map((e) =>
-              e.objectID === recordUpdated.objectID ? recordUpdated : e
-            );
-            this.suppliers = this.suppliers.map((s) =>
-              s.key === recordUpdatedMapped?.key ? recordUpdatedMapped : s
-            );
+            this.suppliers = this.suppliers.map(s => (s.key === recordUpdatedMapped?.key ? recordUpdatedMapped : s));
           }
         } else if (this.userAction === eActions.Delete) {
-          this.entities = this.entities.filter(
-            (e) => e.objectID !== this.selected?.objectID
-          );
-          this.entitiesBackup = this.entitiesBackup.filter(
-            (e) => e.objectID !== this.selected?.objectID
-          );
-          this.suppliers = this.suppliers.filter(
-            (e) => e.key !== this.selected?.objectID
-          );
+          this.entities = this.entities.filter(e => e.objectID !== this.selected?.objectID);
+          this.entitiesBackup = this.entitiesBackup.filter(e => e.objectID !== this.selected?.objectID);
+          this.suppliers = this.suppliers.filter(e => e.key !== this.selected?.objectID);
         }
       } else {
         this.entities.push(...entities);
@@ -291,21 +256,17 @@ export class SuppliersComponent implements OnInit, OnDestroy {
 
   public async handleSubmit() {
     if (this.form.invalid) {
-      this.notification.info(
-        'Nuevo registro',
-        'Debes completar los campos marcados con un *'
-      );
+      this.notification.info('Nuevo registro', 'Debes completar los campos marcados con un *');
       return;
     }
     this.isSubmitting = true;
 
     const authToken = await this.authService.getIdTokenResult();
 
-    const { documentType, documentNumber, phone, codePhone, ...rest } =
-      this.form.getRawValue();
+    const { documentType, documentNumber, phone, codePhone, ...rest } = this.form.getRawValue();
 
     if (this.selected) {
-      const body: { entity: IEntityUpdate; authToken: string } = {
+      const body: IEntityRequest = {
         entity: {
           ...(rest as IEntityUpdate),
           identificationDocument: `${documentType}-${documentNumber}`,
@@ -315,7 +276,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
       };
       return this.update(this.selected?.objectID || '', body);
     } else {
-      const body: { entity: IEntityCreate; authToken: string } = {
+      const body: IEntityRequest = {
         entity: {
           ...(rest as IEntityCreate),
           identificationDocument: `${documentType}-${documentNumber}`,
@@ -327,17 +288,15 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     }
   }
 
-  private update(id: string, body: any) {
+  private update(id: string, body: IEntityRequest) {
     this.userAction = eActions.Update;
-    this.entitiesService.update(id, body).subscribe({
+
+    this.suppliersService.update(id, body).subscribe({
       next: () => {
         this.handleClose();
-        this.notification.success(
-          'Actualizar proveedor',
-          'Se ha actualizado satisfactoriamente'
-        );
+        this.notification.success('Actualizar proveedor', 'Se ha actualizado satisfactoriamente');
       },
-      error: (err) => {
+      error: err => {
         if (err.status > 0) {
           this.notification.error(`Error ${err.status}`, err.error);
           this.isSubmitting = false;
@@ -346,17 +305,14 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     });
   }
 
-  private create(body: any) {
+  private create(body: IEntityRequest) {
     this.userAction = eActions.Create;
-    this.entitiesService.create(body).subscribe({
+    this.suppliersService.create(body).subscribe({
       next: () => {
         this.handleClose();
-        this.notification.success(
-          'Crear proveedor',
-          'Se ha creado satisfactoriamente'
-        );
+        this.notification.success('Crear proveedor', 'Se ha creado satisfactoriamente');
       },
-      error: (err) => {
+      error: err => {
         if (err.status > 0) {
           this.notification.error(`Error ${err.status}`, err.error);
           this.isSubmitting = false;
@@ -369,15 +325,12 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     this.userAction = eActions.Delete;
     this.isLoading = true;
     const authToken = await this.authService.getIdTokenResult();
-    this.entitiesService.delete(id, authToken).subscribe({
+    this.suppliersService.delete(id, authToken).subscribe({
       next: () => {
         this.isLoading = false;
-        this.notification.success(
-          'Eliminar proveedor',
-          'Se ha eliminado satisfactoriamente'
-        );
+        this.notification.success('Eliminar proveedor', 'Se ha eliminado satisfactoriamente');
       },
-      error: (err) => {
+      error: err => {
         if (err.status > 0) {
           this.notification.error(`Error ${err.status}`, err.error);
           this.isLoading = false;
@@ -388,7 +341,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
 
   public handleAction({ id, action }: IActionResponse) {
     if (action === eActions.Delete) {
-      this.selected = this.entities.find((e) => e.objectID === id);
+      this.selected = this.entities.find(e => e.objectID === id);
       if (this.selected) {
         this.modal.confirm({
           nzTitle: 'Eliminar proveedor',
@@ -403,7 +356,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     }
 
     if (action === eActions.Update) {
-      this.selected = this.entities.find((e) => e.objectID === id);
+      this.selected = this.entities.find(e => e.objectID === id);
 
       this.buildForm();
       this.handleOpen();

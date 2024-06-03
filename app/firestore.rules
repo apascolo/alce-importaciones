@@ -1,10 +1,13 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
     match /entities/{entityId} {
-      allow read: if true;
-      allow write: if (request.auth != null && request.auth.token.admin)
+      allow read: if (request.auth != null || request.auth.token.admin);
+      allow write: if (request.auth != null || request.auth.token.admin);
+    }
+     match /roles/{roleId} {
+      allow read: if (request.auth != null || request.auth.token.admin);
+      allow write: if (request.auth != null || request.auth.token.admin);
     }
   }
 }

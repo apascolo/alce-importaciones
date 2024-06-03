@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { connectAuthEmulator, getAuth, provideAuth } from '@angular/fire/auth';
 import { routes } from './app.routes';
 import { es_ES, provideNzI18n } from 'ng-zorro-antd/i18n';
-import { registerLocaleData } from '@angular/common';
+import { DatePipe, registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -11,31 +11,18 @@ import { provideHttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { provideFirestore } from '@angular/fire/firestore';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
-import {
-  connectFunctionsEmulator,
-  getFunctions,
-  provideFunctions,
-} from '@angular/fire/functions';
-import {
-  connectStorageEmulator,
-  getStorage,
-  provideStorage,
-} from '@angular/fire/storage';
+import { connectFunctionsEmulator, getFunctions, provideFunctions } from '@angular/fire/functions';
+import { connectStorageEmulator, getStorage, provideStorage } from '@angular/fire/storage';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { NZ_ICONS } from 'ng-zorro-antd/icon';
-import {
-  NgxCurrencyInputMode,
-  provideEnvironmentNgxCurrency,
-} from 'ngx-currency';
+import { NgxCurrencyInputMode, provideEnvironmentNgxCurrency } from 'ngx-currency';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
 };
-const icons: IconDefinition[] = Object.keys(antDesignIcons).map(
-  (key) => antDesignIcons[key]
-);
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
 
 const ngxCurrencyConf = {
   align: 'end',
@@ -61,11 +48,10 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
     provideHttpClient(),
+    DatePipe,
     { provide: NZ_ICONS, useValue: icons },
     provideEnvironmentNgxCurrency(ngxCurrencyConf),
-    importProvidersFrom(
-      provideFirebaseApp(() => initializeApp(environment.firebase))
-    ),
+    importProvidersFrom(provideFirebaseApp(() => initializeApp(environment.firebase))),
     importProvidersFrom(
       provideAuth(() => {
         if (environment.useEmulators) {
