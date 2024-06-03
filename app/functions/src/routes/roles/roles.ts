@@ -4,18 +4,18 @@ import { updateTotalDb } from '../../utils/updateTotalDb';
 import { db, functions } from '../../config/environment';
 import { TotalDB } from '../../types/TotalDb';
 import { ePermissions, eCollentions, eTotalsDb } from '../../enums/index';
-import { IRoleCreate, IRoleUpdate } from '../../interfaces/index';
+import { IRoleCreate, IRoleRequest, IRoleUpdate } from '../../interfaces/index';
 
 const createRole = async (req: Request, res: Response) => {
   interface Props {
-    role: IRoleCreate;
+    role: IRoleRequest;
   }
 
   const { role } = req.body as Props;
   const { name, permissions } = role;
 
   const nameTrim = name && name.trim();
-  const nameLowercase = nameTrim.trim();
+  const nameLowercase = nameTrim.toLowerCase();
   const allValidRoles = permissions.every((rol) => Object.values(ePermissions).includes(rol));
 
   if (!nameTrim || !nameTrim.length) {
@@ -56,12 +56,12 @@ const createRole = async (req: Request, res: Response) => {
 
 const updateRole = async (req: Request, res: Response) => {
   interface Props {
-    role: IRoleUpdate;
+    role: IRoleRequest;
   }
 
   const { id } = req.params;
   const { role } = req.body as Props;
-  const { name, permissions, users } = role;
+  const { name, permissions } = role;
 
   const nameTrim = name && name.trim();
   const nameLowercase = nameTrim.toLowerCase();
@@ -84,9 +84,9 @@ const updateRole = async (req: Request, res: Response) => {
   }
 
   try {
-    const rolExists = await db.collection(eCollentions.Roles).where('nameLowercase', '==', nameLowercase).get();
+    const roleExists = await db.collection(eCollentions.Roles).where('nameLowercase', '==', nameLowercase).get();
 
-    if (!rolExists.empty && id !== rolExists.docs[0].id) {
+    if (!roleExists.empty && id !== roleExists.docs[0].id) {
       return res.status(409).send(`Lo siento, ya existe un rol con este nombre`);
     }
 
@@ -95,7 +95,6 @@ const updateRole = async (req: Request, res: Response) => {
       nameLowercase,
       modifiedAt: Date.now(),
       permissions,
-      users,
     };
 
     await db
@@ -103,7 +102,7 @@ const updateRole = async (req: Request, res: Response) => {
       .doc(id)
       .update({ ...newRole });
 
-    return res.send({ ...rolExists.docs[0].data(), ...newRole, id });
+    return res.send({ ...newRole, id });
   } catch (error) {
     console.log(error);
     return res.status(500).send(handleError(error));

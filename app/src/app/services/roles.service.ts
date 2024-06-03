@@ -26,6 +26,6 @@ export class RolesService {
   getList = () => {
     const itemCollection = collection(this.firestore, 'roles') as CollectionReference<IRole>;
     const q = query(itemCollection, orderBy('createdAt', 'desc'));
-    return collectionData<IRole>(q, { idField: 'objectID' }) as Observable<IRole[]>;
+    return collectionData<IRole>(q, { idField: 'id' }) as Observable<IRole[]>;
   };
 }

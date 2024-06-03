@@ -165,7 +165,7 @@ const updateEntity = async (req: Request, res: Response) => {
       .doc(id)
       .update({ ...newEntity });
 
-    return res.send({ ...entityExists.docs[0].data(), ...newEntity, objectID: id });
+    return res.send({ ...newEntity, objectID: id });
   } catch (error) {
     console.log(error);
     return res.status(500).send(handleError(error));

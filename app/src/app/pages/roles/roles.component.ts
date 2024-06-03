@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ButtonComponent } from '@components/button/button.component';
 import { DatatableComponent } from '@components/datatable/datatable.component';
@@ -30,14 +30,16 @@ import { RolesService } from '@services/roles.service';
   styleUrl: './roles.component.scss',
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class RolesComponent implements OnInit {
+export class RolesComponent implements OnInit, OnDestroy {
+  @ViewChild(DrawerRoleComponent) drawerRoleComponent: DrawerRoleComponent;
+
   private authService = inject(AuthService);
   private rolesService = inject(RolesService);
   private modal = inject(NzModalService);
   private notification = inject(NzNotificationService);
   private datePipe = inject(DatePipe);
 
-  private subscriptions: Subscription;
+  private subscriptions: Subscription = new Subscription();
   private roles: IRole[] = [];
 
   public isLoading = true;
@@ -68,22 +70,28 @@ export class RolesComponent implements OnInit {
     },
   ];
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   ngOnInit(): void {
     this.loadData();
   }
 
   private loadData() {
     this.isLoading = true;
-    this.rolesService.getList().subscribe(response => {
+    const getRolesSub = this.rolesService.getList().subscribe(response => {
       this.roles = response;
       this.mapRoles();
     });
+
+    this.subscriptions.add(getRolesSub);
   }
 
   private mapRoles() {
     this.rolesDataTable = this.roles.map(r => ({
       createdAt: this.datePipe.transform(r.createdAt, 'dd/MM/yyyy')!.toString(),
-      key: r.objectID || '',
+      key: r.id || '',
       name: r.name,
       users: r.users,
     }));
@@ -96,8 +104,10 @@ export class RolesComponent implements OnInit {
   }
 
   public handleCloseDrawer() {
-    this.isSubmitting = false;
+    this.drawerRoleComponent.resetDrawer();
     this.openDrawer = false;
+    this.isSubmitting = false;
+    this.selected = undefined;
   }
 
   public async handleSubmit(role: IRoleCreate | IRoleUpdate) {
@@ -111,45 +121,78 @@ export class RolesComponent implements OnInit {
     };
 
     if (this.selected) {
-      // update
+      this.update(newRequestRole, this.selected.id);
     } else {
-      this.rolesService.create(newRequestRole).subscribe({
-        next: () => {
-          this.handleCloseDrawer();
-          this.notification.success('Crear rol', 'Se ha creado satisfactoriamente');
-        },
-        error: err => {
-          if (err.status > 0) {
-            this.notification.error(`Error ${err.status}`, err.error);
-            this.isSubmitting = false;
-          }
-        },
-      });
+      this.create(newRequestRole);
     }
   }
 
+  private update(roleRequest: IRoleRequest, roleId: string) {
+    this.rolesService.update(roleId, roleRequest).subscribe({
+      next: () => {
+        this.handleCloseDrawer();
+        this.notification.success('Actualizar rol', 'Se ha actualizado satisfactoriamente');
+      },
+      error: err => {
+        if (err.status > 0) {
+          this.notification.error(`Error ${err.status}`, err.error);
+          this.isSubmitting = false;
+        }
+      },
+    });
+  }
+
+  private create(roleRequest: IRoleRequest) {
+    this.rolesService.create(roleRequest).subscribe({
+      next: () => {
+        this.handleCloseDrawer();
+        this.notification.success('Crear rol', 'Se ha creado satisfactoriamente');
+      },
+      error: err => {
+        if (err.status > 0) {
+          this.notification.error(`Error ${err.status}`, err.error);
+          this.isSubmitting = false;
+        }
+      },
+    });
+  }
+
+  private async delete(id: string) {
+    this.isLoading = true;
+    this.selected = undefined;
+    this.drawerRoleComponent.resetDrawer();
+    const authToken = await this.authService.getIdTokenResult();
+    this.rolesService.delete(id, authToken).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.notification.success('Eliminar rol', 'Se ha eliminado satisfactoriamente');
+      },
+      error: err => {
+        if (err.status > 0) {
+          this.notification.error(`Error ${err.status}`, err.error);
+          this.isLoading = false;
+        }
+      },
+    });
+  }
+
   public handleAction({ id, action }: IActionResponse) {
-    if (action === eActions.Delete) {
-      this.selected = this.roles.find(e => e.objectID === id);
-      if (this.selected) {
-        this.modal.confirm({
-          nzTitle: 'Eliminar proveedor',
-          nzContent: `¿Estás seguro que quieres eliminar a  de tus proveedores?`,
-          nzOkText: 'Sí, eliminar',
-          nzOkType: 'primary',
-          nzOkDanger: true,
-          // nzOnOk: () => this.delete(id),
-          nzCancelText: 'No, cancelar',
-        });
-      }
+    this.selected = this.roles.find(r => r.id === id);
+
+    if (action === eActions.Delete && this.selected) {
+      this.modal.confirm({
+        nzTitle: 'Eliminar rol',
+        nzContent: `¿Estás seguro que quieres eliminar el rol "${this.selected.name}"?`,
+        nzOkText: 'Sí, eliminar',
+        nzOkType: 'primary',
+        nzOkDanger: true,
+        nzOnOk: () => this.delete(id),
+        nzCancelText: 'No, cancelar',
+      });
     }
 
     if (action === eActions.Update) {
-      this.selected = this.roles.find(e => e.objectID === id);
-
-      // this.buildForm();
-      // this.handleOpen();
-      return;
+      this.handleOpenDrawer();
     }
   }
 }

@@ -1,13 +1,10 @@
 <button
   [type]="type"
   [disabled]="isLoading || disabled"
-  [class]="
-    'rounded-md block w-full transition-all fond-medium uppercase py-1.5 px-3 ' +
-    colorClass
-  "
+  [class]="'rounded-md block w-full transition-all fond-medium uppercase py-1.5 px-3 ' + colorClass"
   [ngClass]="{ 'border-gray-500': isLoading }"
   (click)="handleClick()"
 >
-  <span *ngIf="!isLoading; else elseBlock">{{ name }}</span>
-  <ng-template #elseBlock>Espere...</ng-template>
+  <span [hidden]="isLoading">{{ name }}</span>
+  <span [hidden]="!isLoading">Espere...</span>
 </button>

@@ -22,7 +22,9 @@
       <label class="block text-sm font-medium leading-6 text-gray-900">
         Permisos<span class="text-rose-700 text-lg">*</span>
       </label>
-      <label nz-checkbox (nzCheckedChange)="handleGroup('allPermissions', $event)"> Seleccionar todos </label>
+      <label nz-checkbox (nzCheckedChange)="handleGroup('allPermissions', $event)" [nzChecked]="allPermissionsChecked">
+        Seleccionar todos
+      </label>
     </div>
 
     <div class="grid gap-4 grid-cols-3">
@@ -321,7 +323,7 @@
           formControlName="allBanksPermissions"
           (nzCheckedChange)="handleGroup('allBanksPermissions', $event)"
         >
-          Gastos
+          Bancos
         </label>
         <hr class="my-1" />
         <ng-container formGroupName="banks">

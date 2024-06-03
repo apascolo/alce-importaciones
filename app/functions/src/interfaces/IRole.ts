@@ -20,5 +20,9 @@ export interface IRoleUpdate extends IFullAudited {
   name: string;
   nameLowercase: string;
   permissions: ePermissions[];
-  users: number;
+}
+
+export interface IRoleRequest {
+  name: string;
+  permissions: ePermissions[];
 }
