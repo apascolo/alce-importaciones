@@ -33,8 +33,7 @@ export interface IRoleControls {
     createUsers: FormControl<boolean | null>;
     updateUsers: FormControl<boolean | null>;
     viewUsers: FormControl<boolean | null>;
-    softDeleteUsers: FormControl<boolean | null>;
-    hardDeleteUsers: FormControl<boolean | null>;
+    deleteUsers: FormControl<boolean | null>;
   }>;
 
   allSuppliersPermissions: FormControl<boolean | null>;
@@ -42,8 +41,7 @@ export interface IRoleControls {
     createSuppliers: FormControl<boolean | null>;
     updateSuppliers: FormControl<boolean | null>;
     viewSuppliers: FormControl<boolean | null>;
-    softDeleteSuppliers: FormControl<boolean | null>;
-    hardDeleteSuppliers: FormControl<boolean | null>;
+    deleteSuppliers: FormControl<boolean | null>;
   }>;
 
   allCustomersPermissions: FormControl<boolean | null>;
@@ -51,8 +49,7 @@ export interface IRoleControls {
     createCustomers: FormControl<boolean | null>;
     updateCustomers: FormControl<boolean | null>;
     viewCustomers: FormControl<boolean | null>;
-    softDeleteCustomers: FormControl<boolean | null>;
-    hardDeleteCustomers: FormControl<boolean | null>;
+    deleteCustomers: FormControl<boolean | null>;
   }>;
 
   allRolesPermissions: FormControl<boolean | null>;
@@ -84,8 +81,7 @@ export interface IRoleControls {
     createProducts: FormControl<boolean | null>;
     updateProducts: FormControl<boolean | null>;
     viewProducts: FormControl<boolean | null>;
-    softDeleteProducts: FormControl<boolean | null>;
-    hardDeleteProducts: FormControl<boolean | null>;
+    deleteProducts: FormControl<boolean | null>;
   }>;
 
   allSalesPermissions: FormControl<boolean | null>;
@@ -93,8 +89,7 @@ export interface IRoleControls {
     createSales: FormControl<boolean | null>;
     updateSales: FormControl<boolean | null>;
     viewSales: FormControl<boolean | null>;
-    softDeleteSales: FormControl<boolean | null>;
-    hardDeleteSales: FormControl<boolean | null>;
+    deleteSales: FormControl<boolean | null>;
   }>;
 
   allExpensesPermissions: FormControl<boolean | null>;
@@ -102,8 +97,7 @@ export interface IRoleControls {
     createExpenses: FormControl<boolean | null>;
     updateExpenses: FormControl<boolean | null>;
     viewExpenses: FormControl<boolean | null>;
-    softDeleteExpenses: FormControl<boolean | null>;
-    hardDeleteExpenses: FormControl<boolean | null>;
+    deleteExpenses: FormControl<boolean | null>;
   }>;
 
   allBanksPermissions: FormControl<boolean | null>;
@@ -111,8 +105,7 @@ export interface IRoleControls {
     createBanks: FormControl<boolean | null>;
     updateBanks: FormControl<boolean | null>;
     viewBanks: FormControl<boolean | null>;
-    softDeleteBanks: FormControl<boolean | null>;
-    hardDeleteBanks: FormControl<boolean | null>;
+    deleteBanks: FormControl<boolean | null>;
   }>;
 
   allCustomerAcquisitionsPermissions: FormControl<boolean | null>;
@@ -120,8 +113,7 @@ export interface IRoleControls {
     createCustomerAcquisitions: FormControl<boolean | null>;
     updateCustomerAcquisitions: FormControl<boolean | null>;
     viewCustomerAcquisitions: FormControl<boolean | null>;
-    softDeleteCustomerAcquisitions: FormControl<boolean | null>;
-    hardDeleteCustomerAcquisitions: FormControl<boolean | null>;
+    deleteCustomerAcquisitions: FormControl<boolean | null>;
   }>;
 
   allInfoBusinessPermissions: FormControl<boolean | null>;

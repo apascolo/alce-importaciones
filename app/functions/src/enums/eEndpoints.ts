@@ -5,4 +5,5 @@ export enum eEndpoints {
   Suppliers = '/suppliers',
   Customers = '/customers',
   Roles = '/roles',
+  Users = '/users',
 }

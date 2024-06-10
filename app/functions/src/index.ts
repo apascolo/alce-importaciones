@@ -26,14 +26,14 @@ app.get(eEndpoints.SetStatistics, verifySuperAdminToken, ROUTES.setStatisticsDef
 ****************************************************/
 app.post(eEndpoints.Suppliers, checkPermissions(ePermissions.CreateSuppliers), ROUTES.createEntity);
 app.put(`${eEndpoints.Suppliers}/:id`, checkPermissions(ePermissions.UpdateSuppliers), ROUTES.updateEntity);
-app.delete(`${eEndpoints.Suppliers}/:id`, checkPermissions(ePermissions.SoftDeleteSuppliers), ROUTES.softDeleteEntity);
+app.delete(`${eEndpoints.Suppliers}/:id`, checkPermissions(ePermissions.DeleteSuppliers), ROUTES.deleteEntity);
 
 app.post(eEndpoints.Customers, checkPermissions(ePermissions.CreateCustomers), ROUTES.createEntity);
 app.put(`${eEndpoints.Customers}/:id`, checkPermissions(ePermissions.UpdateCustomers), ROUTES.updateEntity);
-app.delete(`${eEndpoints.Customers}/:id`, checkPermissions(ePermissions.SoftDeleteCustomers), ROUTES.softDeleteEntity);
+app.delete(`${eEndpoints.Customers}/:id`, checkPermissions(ePermissions.DeleteCustomers), ROUTES.deleteEntity);
 
 exports.entityCreated = ROUTES.entityCreated;
-exports.entityUpdate = ROUTES.entityUpdate;
+exports.entityUpdate = ROUTES.entityUpdated;
 exports.entityDeleted = ROUTES.entityDeleted;
 
 /** **************************************************
@@ -45,6 +45,16 @@ app.delete(`${eEndpoints.Roles}/:id`, checkPermissions(ePermissions.DeleteRoles)
 
 exports.roleCreated = ROUTES.roleCreated;
 exports.roleDeleted = ROUTES.roleDeleted;
+
+/** **************************************************
+                USERS ROUTES
+****************************************************/
+app.post(eEndpoints.Users, checkPermissions(ePermissions.CreateUsers), ROUTES.createUser);
+app.put(`${eEndpoints.Users}/:id`, checkPermissions(ePermissions.UpdateUsers), ROUTES.updateUser);
+app.delete(`${eEndpoints.Users}/:id`, checkPermissions(ePermissions.DeleteUsers), ROUTES.deleteUser);
+
+exports.userCreated = ROUTES.userCreated;
+exports.userDeleted = ROUTES.userDeleted;
 
 // START API
 exports.api = functions.https.onRequest(app);

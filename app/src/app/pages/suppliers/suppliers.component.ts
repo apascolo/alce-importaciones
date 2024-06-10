@@ -132,6 +132,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     const getData = this.suppliersService.getList(this.getEntityProps).subscribe({
       next: response => {
+        console.log('object');
         this.allDataUploaded = response.length === 0;
         this.mapEntities(response);
       },
@@ -188,7 +189,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
       email: e.email,
       phone: e.phone,
     }));
-
+    console.log(this.userAction);
     if (!isSearch) {
       if (this.userAction) {
         if (this.userAction === eActions.Create) {
@@ -209,16 +210,19 @@ export class SuppliersComponent implements OnInit, OnDestroy {
             this.suppliers = this.suppliers.map(s => (s.key === recordUpdatedMapped?.key ? recordUpdatedMapped : s));
           }
         } else if (this.userAction === eActions.Delete) {
+          console.log('object');
           this.entities = this.entities.filter(e => e.objectID !== this.selected?.objectID);
           this.entitiesBackup = this.entitiesBackup.filter(e => e.objectID !== this.selected?.objectID);
           this.suppliers = this.suppliers.filter(e => e.key !== this.selected?.objectID);
         }
       } else {
+        console.log('2');
         this.entities.push(...entities);
         this.entitiesBackup.push(...entities);
         this.suppliers = [...this.suppliers, ...suppliersMapped];
       }
     } else {
+      console.log('3');
       this.entities = [...entities];
       this.suppliers = [...suppliersMapped];
     }
@@ -332,8 +336,8 @@ export class SuppliersComponent implements OnInit, OnDestroy {
       },
       error: err => {
         if (err.status > 0) {
-          this.notification.error(`Error ${err.status}`, err.error);
           this.isLoading = false;
+          this.notification.error(`Error ${err.status}`, err.error);
         }
       },
     });
@@ -378,7 +382,6 @@ export class SuppliersComponent implements OnInit, OnDestroy {
       const { hits } = await index.search(this.query, {
         offset,
         length: this.requestLimit,
-        filters: 'isDeleted=0',
       });
 
       if (hits.length) {

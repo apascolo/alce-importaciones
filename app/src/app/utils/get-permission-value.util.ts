@@ -8,10 +8,8 @@ export const getPermissionValue = (key: string): ePermissions | undefined => {
       return ePermissions.UpdateUsers;
     case 'viewUsers':
       return ePermissions.ViewUsers;
-    case 'softDeleteUsers':
-      return ePermissions.SoftDeleteUsers;
-    case 'hardDeleteUsers':
-      return ePermissions.HardDeleteUsers;
+    case 'deleteUsers':
+      return ePermissions.DeleteUsers;
 
     case 'createSuppliers':
       return ePermissions.CreateSuppliers;
@@ -19,10 +17,8 @@ export const getPermissionValue = (key: string): ePermissions | undefined => {
       return ePermissions.UpdateSuppliers;
     case 'viewSuppliers':
       return ePermissions.ViewSuppliers;
-    case 'softDeleteSuppliers':
-      return ePermissions.SoftDeleteSuppliers;
-    case 'hardDeleteSuppliers':
-      return ePermissions.HardDeleteSuppliers;
+    case 'deleteSuppliers':
+      return ePermissions.DeleteSuppliers;
 
     case 'createProducts':
       return ePermissions.CreateProducts;
@@ -30,10 +26,8 @@ export const getPermissionValue = (key: string): ePermissions | undefined => {
       return ePermissions.UpdateProducts;
     case 'viewProducts':
       return ePermissions.ViewProducts;
-    case 'softDeleteProducts':
-      return ePermissions.SoftDeleteProducts;
-    case 'hardDeleteProducts':
-      return ePermissions.HardDeleteProducts;
+    case 'deleteProducts':
+      return ePermissions.DeleteProducts;
 
     case 'createCustomers':
       return ePermissions.CreateCustomers;
@@ -41,10 +35,8 @@ export const getPermissionValue = (key: string): ePermissions | undefined => {
       return ePermissions.UpdateCustomers;
     case 'viewCustomers':
       return ePermissions.ViewCustomers;
-    case 'softDeleteCustomers':
-      return ePermissions.SoftDeleteCustomers;
-    case 'hardDeleteCustomers':
-      return ePermissions.HardDeleteCustomers;
+    case 'deleteCustomers':
+      return ePermissions.DeleteCustomers;
 
     case 'createSales':
       return ePermissions.CreateSales;
@@ -52,10 +44,8 @@ export const getPermissionValue = (key: string): ePermissions | undefined => {
       return ePermissions.UpdateSales;
     case 'viewSales':
       return ePermissions.ViewSales;
-    case 'softDeleteSales':
-      return ePermissions.SoftDeleteSales;
-    case 'hardDeleteSales':
-      return ePermissions.HardDeleteSales;
+    case 'deleteSales':
+      return ePermissions.DeleteSales;
 
     case 'createExpenses':
       return ePermissions.CreateExpenses;
@@ -63,10 +53,8 @@ export const getPermissionValue = (key: string): ePermissions | undefined => {
       return ePermissions.UpdateExpenses;
     case 'viewExpenses':
       return ePermissions.ViewExpenses;
-    case 'softDeleteExpenses':
-      return ePermissions.SoftDeleteExpenses;
-    case 'hardDeleteExpenses':
-      return ePermissions.HardDeleteExpenses;
+    case 'deleteExpenses':
+      return ePermissions.DeleteExpenses;
 
     case 'createBanks':
       return ePermissions.CreateBanks;
@@ -74,10 +62,8 @@ export const getPermissionValue = (key: string): ePermissions | undefined => {
       return ePermissions.UpdateBanks;
     case 'viewBanks':
       return ePermissions.ViewBanks;
-    case 'softDeleteBanks':
-      return ePermissions.SoftDeleteBanks;
-    case 'hardDeleteBanks':
-      return ePermissions.HardDeleteBanks;
+    case 'deleteBanks':
+      return ePermissions.DeleteBanks;
 
     case 'createCustomerAcquisitions':
       return ePermissions.CreateCustomerAcquisitions;
@@ -85,10 +71,8 @@ export const getPermissionValue = (key: string): ePermissions | undefined => {
       return ePermissions.UpdateCustomerAcquisitions;
     case 'viewCustomerAcquisitions':
       return ePermissions.ViewCustomerAcquisitions;
-    case 'softDeleteCustomerAcquisitions':
-      return ePermissions.SoftDeleteCustomerAcquisitions;
-    case 'hardDeleteCustomerAcquisitions':
-      return ePermissions.HardDeleteCustomerAcquisitions;
+    case 'deleteCustomerAcquisitions':
+      return ePermissions.DeleteCustomerAcquisitions;
 
     case 'createRoles':
       return ePermissions.CreateRoles;

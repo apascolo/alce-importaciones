@@ -109,24 +109,21 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
       ePermissions.CreateUsers,
       ePermissions.UpdateUsers,
       ePermissions.ViewUsers,
-      ePermissions.SoftDeleteUsers,
-      ePermissions.HardDeleteUsers,
+      ePermissions.DeleteUsers,
     ]);
 
     const allSuppliersPermissions = this.validateAllCheckedGroup([
       ePermissions.CreateSuppliers,
       ePermissions.UpdateSuppliers,
       ePermissions.ViewSuppliers,
-      ePermissions.SoftDeleteSuppliers,
-      ePermissions.HardDeleteSuppliers,
+      ePermissions.DeleteSuppliers,
     ]);
 
     const allCustomersPermissions = this.validateAllCheckedGroup([
       ePermissions.CreateCustomers,
       ePermissions.UpdateCustomers,
       ePermissions.ViewCustomers,
-      ePermissions.SoftDeleteCustomers,
-      ePermissions.HardDeleteCustomers,
+      ePermissions.DeleteCustomers,
     ]);
 
     const allRolesPermissions = this.validateAllCheckedGroup([
@@ -154,40 +151,35 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
       ePermissions.CreateProducts,
       ePermissions.UpdateProducts,
       ePermissions.ViewProducts,
-      ePermissions.SoftDeleteProducts,
-      ePermissions.HardDeleteProducts,
+      ePermissions.DeleteProducts,
     ]);
 
     const allSalesPermissions = this.validateAllCheckedGroup([
       ePermissions.CreateSales,
       ePermissions.UpdateSales,
       ePermissions.ViewSales,
-      ePermissions.SoftDeleteSales,
-      ePermissions.HardDeleteSales,
+      ePermissions.DeleteSales,
     ]);
 
     const allExpensesPermissions = this.validateAllCheckedGroup([
       ePermissions.CreateExpenses,
       ePermissions.UpdateExpenses,
       ePermissions.ViewExpenses,
-      ePermissions.SoftDeleteExpenses,
-      ePermissions.HardDeleteExpenses,
+      ePermissions.DeleteExpenses,
     ]);
 
     const allBanksPermissions = this.validateAllCheckedGroup([
       ePermissions.CreateBanks,
       ePermissions.UpdateBanks,
       ePermissions.ViewBanks,
-      ePermissions.SoftDeleteBanks,
-      ePermissions.HardDeleteBanks,
+      ePermissions.DeleteBanks,
     ]);
 
     const allCustomerAcquisitionsPermissions = this.validateAllCheckedGroup([
       ePermissions.CreateCustomerAcquisitions,
       ePermissions.UpdateCustomerAcquisitions,
       ePermissions.ViewCustomerAcquisitions,
-      ePermissions.SoftDeleteCustomerAcquisitions,
-      ePermissions.HardDeleteCustomerAcquisitions,
+      ePermissions.DeleteCustomerAcquisitions,
     ]);
 
     const allInfoBusinessPermissions = this.validateAllCheckedGroup([
@@ -251,8 +243,7 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
         createUsers: [(permissions || []).includes(ePermissions.CreateUsers)],
         updateUsers: [(permissions || []).includes(ePermissions.UpdateUsers)],
         viewUsers: [(permissions || []).includes(ePermissions.ViewUsers)],
-        softDeleteUsers: [(permissions || []).includes(ePermissions.SoftDeleteUsers)],
-        hardDeleteUsers: [(permissions || []).includes(ePermissions.HardDeleteUsers)],
+        deleteUsers: [(permissions || []).includes(ePermissions.DeleteUsers)],
       }),
 
       allSuppliersPermissions: [allSuppliersPermissions],
@@ -260,8 +251,7 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
         createSuppliers: [(permissions || []).includes(ePermissions.CreateSuppliers)],
         updateSuppliers: [(permissions || []).includes(ePermissions.UpdateSuppliers)],
         viewSuppliers: [(permissions || []).includes(ePermissions.ViewSuppliers)],
-        softDeleteSuppliers: [(permissions || []).includes(ePermissions.SoftDeleteSuppliers)],
-        hardDeleteSuppliers: [(permissions || []).includes(ePermissions.HardDeleteSuppliers)],
+        deleteSuppliers: [(permissions || []).includes(ePermissions.DeleteSuppliers)],
       }),
 
       allCustomersPermissions: [allCustomersPermissions],
@@ -269,8 +259,7 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
         createCustomers: [(permissions || []).includes(ePermissions.CreateCustomers)],
         updateCustomers: [(permissions || []).includes(ePermissions.UpdateCustomers)],
         viewCustomers: [(permissions || []).includes(ePermissions.ViewCustomers)],
-        softDeleteCustomers: [(permissions || []).includes(ePermissions.SoftDeleteCustomers)],
-        hardDeleteCustomers: [(permissions || []).includes(ePermissions.HardDeleteCustomers)],
+        deleteCustomers: [(permissions || []).includes(ePermissions.DeleteCustomers)],
       }),
 
       allRolesPermissions: [allRolesPermissions],
@@ -302,8 +291,7 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
         createProducts: [(permissions || []).includes(ePermissions.CreateProducts)],
         updateProducts: [(permissions || []).includes(ePermissions.UpdateProducts)],
         viewProducts: [(permissions || []).includes(ePermissions.ViewProducts)],
-        softDeleteProducts: [(permissions || []).includes(ePermissions.SoftDeleteProducts)],
-        hardDeleteProducts: [(permissions || []).includes(ePermissions.HardDeleteProducts)],
+        deleteProducts: [(permissions || []).includes(ePermissions.DeleteProducts)],
       }),
 
       allSalesPermissions: [allSalesPermissions],
@@ -311,8 +299,7 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
         createSales: [(permissions || []).includes(ePermissions.CreateSales)],
         updateSales: [(permissions || []).includes(ePermissions.UpdateSales)],
         viewSales: [(permissions || []).includes(ePermissions.ViewSales)],
-        softDeleteSales: [(permissions || []).includes(ePermissions.SoftDeleteSales)],
-        hardDeleteSales: [(permissions || []).includes(ePermissions.HardDeleteSales)],
+        deleteSales: [(permissions || []).includes(ePermissions.DeleteSales)],
       }),
 
       allExpensesPermissions: [allExpensesPermissions],
@@ -320,8 +307,7 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
         createExpenses: [(permissions || []).includes(ePermissions.CreateExpenses)],
         updateExpenses: [(permissions || []).includes(ePermissions.UpdateExpenses)],
         viewExpenses: [(permissions || []).includes(ePermissions.ViewExpenses)],
-        softDeleteExpenses: [(permissions || []).includes(ePermissions.SoftDeleteExpenses)],
-        hardDeleteExpenses: [(permissions || []).includes(ePermissions.HardDeleteExpenses)],
+        deleteExpenses: [(permissions || []).includes(ePermissions.DeleteExpenses)],
       }),
 
       allBanksPermissions: [allBanksPermissions],
@@ -329,8 +315,7 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
         createBanks: [(permissions || []).includes(ePermissions.CreateBanks)],
         updateBanks: [(permissions || []).includes(ePermissions.UpdateBanks)],
         viewBanks: [(permissions || []).includes(ePermissions.ViewBanks)],
-        softDeleteBanks: [(permissions || []).includes(ePermissions.SoftDeleteBanks)],
-        hardDeleteBanks: [(permissions || []).includes(ePermissions.HardDeleteBanks)],
+        deleteBanks: [(permissions || []).includes(ePermissions.DeleteBanks)],
       }),
 
       allCustomerAcquisitionsPermissions: [allCustomerAcquisitionsPermissions],
@@ -338,8 +323,7 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
         createCustomerAcquisitions: [(permissions || []).includes(ePermissions.CreateCustomerAcquisitions)],
         updateCustomerAcquisitions: [(permissions || []).includes(ePermissions.UpdateCustomerAcquisitions)],
         viewCustomerAcquisitions: [(permissions || []).includes(ePermissions.ViewCustomerAcquisitions)],
-        softDeleteCustomerAcquisitions: [(permissions || []).includes(ePermissions.SoftDeleteCustomerAcquisitions)],
-        hardDeleteCustomerAcquisitions: [(permissions || []).includes(ePermissions.HardDeleteCustomerAcquisitions)],
+        deleteCustomerAcquisitions: [(permissions || []).includes(ePermissions.DeleteCustomerAcquisitions)],
       }),
 
       allInfoBusinessPermissions: [allInfoBusinessPermissions],
@@ -415,8 +399,6 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
             [`create${permission}`]: checked,
             [`update${permission}`]: checked,
             [`view${permission}`]: checked,
-            [`softDelete${permission}`]: checked,
-            [`hardDelete${permission}`]: checked,
             [`delete${permission}`]: checked,
           },
         });
@@ -430,8 +412,6 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
         [`create${permission}`]: checked,
         [`update${permission}`]: checked,
         [`view${permission}`]: checked,
-        [`softDelete${permission}`]: checked,
-        [`hardDelete${permission}`]: checked,
         [`delete${permission}`]: checked,
       },
     });

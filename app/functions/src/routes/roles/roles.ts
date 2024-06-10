@@ -4,7 +4,7 @@ import { updateTotalDb } from '../../utils/updateTotalDb';
 import { db, functions } from '../../config/environment';
 import { TotalDB } from '../../types/TotalDb';
 import { ePermissions, eCollentions, eTotalsDb } from '../../enums/index';
-import { IRoleCreate, IRoleRequest, IRoleUpdate } from '../../interfaces/index';
+import { IRoleCreate, IRoleRequest, IRoleUpdate, IUser, IUserUpdate } from '../../interfaces/index';
 
 const createRole = async (req: Request, res: Response) => {
   interface Props {
@@ -68,7 +68,7 @@ const updateRole = async (req: Request, res: Response) => {
   const allValidRoles = permissions.every((rol) => Object.values(ePermissions).includes(rol));
 
   if (!id || !id.trim().length) {
-    return res.status(400).send('Lo siento, no hemos recibido el id del registro a actualizar');
+    return res.status(400).send('Lo siento, no hemos recibido el id del rol a actualizar');
   }
 
   if (!nameTrim || !nameTrim.length) {
@@ -113,13 +113,32 @@ const deleteRole = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   if (!id || !id.trim().length) {
-    return res.status(400).send('Lo siento, no hemos recibido el id del registro a eliminar');
+    return res.status(400).send('Lo siento, no hemos recibido el id del rol a eliminar');
   }
 
   try {
-    await db.collection(eCollentions.Roles).doc(id).delete();
+    const batch = db.batch();
+    const roleRef = db.collection(eCollentions.Roles).doc(id);
 
-    // ! actualizar todos los usuarios con este rol, colocar permissions en vacio y usuario pausado
+    batch.delete(roleRef);
+
+    const usersWithRole = await db.collection(eCollentions.Users).where('roleId', '==', id).get();
+
+    if (!usersWithRole.docs.length) {
+      await batch.commit();
+      return res.status(204);
+    }
+
+    for (const user of usersWithRole.docs) {
+      const updateUser: IUserUpdate = {
+        ...(user.data() as IUser),
+        roleId: null,
+        isDisabled: true,
+      };
+      batch.update(user.ref, { ...updateUser });
+    }
+
+    await batch.commit();
 
     return res.status(204);
   } catch (error) {
