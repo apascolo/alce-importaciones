@@ -54,6 +54,11 @@ export enum ePermissions {
   ViewCustomerAcquisitions = 'view-customer-acquisitions',
   DeleteCustomerAcquisitions = 'delete-customer-acquisitions',
 
+  CreateStores = 'create-stores',
+  UpdateStores = 'update-stores',
+  ViewStores = 'view-stores',
+  DeleteStores = 'delete-stores',
+
   UpdateInfoBusiness = 'update-info-business',
   ViewInfoBusiness = 'view-info-business',
 }

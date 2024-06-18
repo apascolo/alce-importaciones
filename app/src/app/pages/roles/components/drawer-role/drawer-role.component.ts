@@ -34,6 +34,7 @@ const allPermissions: string[] = [
   'Expenses',
   'Banks',
   'CustomerAcquisitions',
+  'Stores',
   'InfoBusiness',
 ];
 
@@ -182,6 +183,13 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
       ePermissions.DeleteCustomerAcquisitions,
     ]);
 
+    const allStoresPermissions = this.validateAllCheckedGroup([
+      ePermissions.CreateStores,
+      ePermissions.UpdateStores,
+      ePermissions.ViewStores,
+      ePermissions.DeleteStores,
+    ]);
+
     const allInfoBusinessPermissions = this.validateAllCheckedGroup([
       ePermissions.UpdateInfoBusiness,
       ePermissions.ViewInfoBusiness,
@@ -199,6 +207,7 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
       allExpensesPermissions &&
       allBanksPermissions &&
       allCustomerAcquisitionsPermissions &&
+      allStoresPermissions &&
       allInfoBusinessPermissions;
 
     return {
@@ -213,6 +222,7 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
       allExpensesPermissions,
       allBanksPermissions,
       allCustomerAcquisitionsPermissions,
+      allStoresPermissions,
       allInfoBusinessPermissions,
     };
   }
@@ -232,6 +242,7 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
       allExpensesPermissions,
       allBanksPermissions,
       allCustomerAcquisitionsPermissions,
+      allStoresPermissions,
       allInfoBusinessPermissions,
     } = this.getValueCheckedPermissionsGroup();
 
@@ -324,6 +335,14 @@ export class DrawerRoleComponent implements OnInit, OnChanges {
         updateCustomerAcquisitions: [(permissions || []).includes(ePermissions.UpdateCustomerAcquisitions)],
         viewCustomerAcquisitions: [(permissions || []).includes(ePermissions.ViewCustomerAcquisitions)],
         deleteCustomerAcquisitions: [(permissions || []).includes(ePermissions.DeleteCustomerAcquisitions)],
+      }),
+
+      allStoresPermissions: [allStoresPermissions],
+      stores: this.fb.group({
+        createStores: [(permissions || []).includes(ePermissions.CreateStores)],
+        updateStores: [(permissions || []).includes(ePermissions.UpdateStores)],
+        viewStores: [(permissions || []).includes(ePermissions.ViewStores)],
+        deleteStores: [(permissions || []).includes(ePermissions.DeleteStores)],
       }),
 
       allInfoBusinessPermissions: [allInfoBusinessPermissions],

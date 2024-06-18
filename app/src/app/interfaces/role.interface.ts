@@ -116,6 +116,14 @@ export interface IRoleControls {
     deleteCustomerAcquisitions: FormControl<boolean | null>;
   }>;
 
+  allStoresPermissions: FormControl<boolean | null>;
+  stores: FormGroup<{
+    createStores: FormControl<boolean | null>;
+    updateStores: FormControl<boolean | null>;
+    viewStores: FormControl<boolean | null>;
+    deleteStores: FormControl<boolean | null>;
+  }>;
+
   allInfoBusinessPermissions: FormControl<boolean | null>;
   infobusiness: FormGroup<{
     updateInfoBusiness: FormControl<boolean | null>;

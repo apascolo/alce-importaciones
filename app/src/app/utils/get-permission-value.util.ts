@@ -83,6 +83,15 @@ export const getPermissionValue = (key: string): ePermissions | undefined => {
     case 'deleteRoles':
       return ePermissions.DeleteRoles;
 
+    case 'createStores':
+      return ePermissions.CreateStores;
+    case 'updateStores':
+      return ePermissions.UpdateStores;
+    case 'viewStores':
+      return ePermissions.ViewStores;
+    case 'deleteStores':
+      return ePermissions.DeleteStores;
+
     case 'createBrands':
       return ePermissions.CreateBrands;
     case 'updateBrands':
