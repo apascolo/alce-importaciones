@@ -31,25 +31,24 @@ import { index } from 'src/environments/configurations';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
-  selector: 'app-suppliers',
-  standalone: true,
-  imports: [
-    CommonModule,
-    DatatableComponent,
-    ButtonComponent,
-    NzDrawerModule,
-    TextFieldComponent,
-    PhoneFieldComponent,
-    DocumentFieldComponent,
-    NzModalModule,
-    ReactiveFormsModule,
-    NzDrawerModule,
-    FormsModule,
-    NzIconModule,
-  ],
-  templateUrl: './suppliers.component.html',
-  styleUrl: './suppliers.component.scss',
-  changeDetection: ChangeDetectionStrategy.Default,
+    selector: 'app-suppliers',
+    imports: [
+        CommonModule,
+        DatatableComponent,
+        ButtonComponent,
+        NzDrawerModule,
+        TextFieldComponent,
+        PhoneFieldComponent,
+        DocumentFieldComponent,
+        NzModalModule,
+        ReactiveFormsModule,
+        NzDrawerModule,
+        FormsModule,
+        NzIconModule,
+    ],
+    templateUrl: './suppliers.component.html',
+    styleUrl: './suppliers.component.scss',
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class SuppliersComponent implements OnInit, OnDestroy {
   private suppliersService = inject(SuppliersService);

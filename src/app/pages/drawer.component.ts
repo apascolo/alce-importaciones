@@ -19,22 +19,21 @@ import { PagesWithTitle } from '@customTypes/index';
 import { titlePages } from '@constants/index';
 
 @Component({
-  selector: 'app-drawer',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    NzDrawerModule,
-    NzLayoutModule,
-    NzMenuModule,
-    RouterModule,
-    NzIconModule,
-    NzAvatarModule,
-    NzDropDownModule,
-  ],
-  templateUrl: './drawer.component.html',
-  styleUrl: './drawer.component.scss',
-  changeDetection: ChangeDetectionStrategy.Default,
+    selector: 'app-drawer',
+    imports: [
+        CommonModule,
+        RouterOutlet,
+        NzDrawerModule,
+        NzLayoutModule,
+        NzMenuModule,
+        RouterModule,
+        NzIconModule,
+        NzAvatarModule,
+        NzDropDownModule,
+    ],
+    templateUrl: './drawer.component.html',
+    styleUrl: './drawer.component.scss',
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class DrawerComponent implements OnInit {
   public year = new Date().getFullYear();

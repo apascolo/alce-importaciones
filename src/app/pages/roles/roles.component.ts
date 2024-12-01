@@ -15,20 +15,19 @@ import { DrawerRoleComponent } from './components/drawer-role/drawer-role.compon
 import { RolesService } from '@services/roles.service';
 
 @Component({
-  selector: 'app-roles',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ButtonComponent,
-    DatatableComponent,
-    NzModalModule,
-    ReactiveFormsModule,
-    FormsModule,
-    DrawerRoleComponent,
-  ],
-  templateUrl: './roles.component.html',
-  styleUrl: './roles.component.scss',
-  changeDetection: ChangeDetectionStrategy.Default,
+    selector: 'app-roles',
+    imports: [
+        CommonModule,
+        ButtonComponent,
+        DatatableComponent,
+        NzModalModule,
+        ReactiveFormsModule,
+        FormsModule,
+        DrawerRoleComponent,
+    ],
+    templateUrl: './roles.component.html',
+    styleUrl: './roles.component.scss',
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class RolesComponent implements OnInit, OnDestroy {
   @ViewChild(DrawerRoleComponent) drawerRoleComponent: DrawerRoleComponent;

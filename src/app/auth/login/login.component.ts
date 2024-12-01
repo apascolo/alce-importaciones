@@ -21,18 +21,17 @@ import { AuthService } from '@services/auth.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    ButtonComponent,
-    TextFieldComponent,
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
-  changeDetection: ChangeDetectionStrategy.Default,
+    selector: 'app-login',
+    imports: [
+        CommonModule,
+        RouterModule,
+        ReactiveFormsModule,
+        ButtonComponent,
+        TextFieldComponent,
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss',
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);

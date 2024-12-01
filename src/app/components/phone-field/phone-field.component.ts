@@ -12,12 +12,11 @@ import { codesPhone } from '@constants/codes-phone.constant';
 import { ICodeOption } from '@interfaces/index';
 
 @Component({
-  selector: 'app-phone-field',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './phone-field.component.html',
-  styleUrl: './phone-field.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-phone-field',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './phone-field.component.html',
+    styleUrl: './phone-field.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PhoneFieldComponent implements OnInit {
   @Input() label: string = 'Teléfono';

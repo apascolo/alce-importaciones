@@ -21,19 +21,18 @@ import { IColumn } from '@interfaces/column.interface';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @Component({
-  selector: 'app-datatable',
-  standalone: true,
-  imports: [
-    CommonModule,
-    NzTableModule,
-    NzDividerModule,
-    NzDropDownModule,
-    NzIconModule,
-    NzSpinModule,
-  ],
-  templateUrl: './datatable.component.html',
-  styleUrl: './datatable.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-datatable',
+    imports: [
+        CommonModule,
+        NzTableModule,
+        NzDividerModule,
+        NzDropDownModule,
+        NzIconModule,
+        NzSpinModule,
+    ],
+    templateUrl: './datatable.component.html',
+    styleUrl: './datatable.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DatatableComponent {
   @ViewChild('table') table: ElementRef;

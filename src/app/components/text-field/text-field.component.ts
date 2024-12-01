@@ -10,12 +10,11 @@ import { FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import { NgxCurrencyDirective } from 'ngx-currency';
 
 @Component({
-  selector: 'app-text-field',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgxCurrencyDirective],
-  templateUrl: './text-field.component.html',
-  styleUrl: './text-field.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-text-field',
+    imports: [CommonModule, ReactiveFormsModule, NgxCurrencyDirective],
+    templateUrl: './text-field.component.html',
+    styleUrl: './text-field.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TextFieldComponent {
   @Input({ transform: booleanAttribute }) hasError = false;

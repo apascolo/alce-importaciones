@@ -38,22 +38,21 @@ const allPermissions: string[] = [
 ];
 
 @Component({
-  selector: 'app-drawer-role',
-  standalone: true,
-  imports: [
-    CommonModule,
-    NzDrawerModule,
-    ButtonComponent,
-    ReactiveFormsModule,
-    TextFieldComponent,
-    NzCheckboxModule,
-    FormsModule,
-    NzIconModule,
-    NzToolTipModule,
-  ],
-  templateUrl: './drawer-role.component.html',
-  styleUrl: './drawer-role.component.scss',
-  changeDetection: ChangeDetectionStrategy.Default,
+    selector: 'app-drawer-role',
+    imports: [
+        CommonModule,
+        NzDrawerModule,
+        ButtonComponent,
+        ReactiveFormsModule,
+        TextFieldComponent,
+        NzCheckboxModule,
+        FormsModule,
+        NzIconModule,
+        NzToolTipModule,
+    ],
+    templateUrl: './drawer-role.component.html',
+    styleUrl: './drawer-role.component.scss',
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class DrawerRoleComponent implements OnInit, OnChanges {
   @Input({ transform: booleanAttribute }) openDrawer = false;

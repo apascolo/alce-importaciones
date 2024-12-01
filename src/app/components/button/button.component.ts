@@ -38,12 +38,11 @@ const colorVariantMap = {
 };
 
 @Component({
-  selector: 'app-button',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './button.component.html',
-  styleUrl: './button.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-button',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './button.component.html',
+    styleUrl: './button.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ButtonComponent implements OnInit {
   @Input() name: string = 'My button';
