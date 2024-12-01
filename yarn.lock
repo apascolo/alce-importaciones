@@ -6728,10 +6728,10 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-ngx-currency@^17.0.0:
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-currency/-/ngx-currency-17.0.0.tgz#54093e878fffd93fbaf0775f4fd4ee6e2f9ab5ad"
-  integrity sha512-e9GQ1Jd0Vta0zC3KP8FM7s/hcFA1UfMKfKJUHgku27mUfhfX+3rZO40anLo0pyO4z1wXy5Pk+mI59TFKn/7tYw==
+ngx-currency@^18.0.0:
+  version "18.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-currency/-/ngx-currency-18.0.0.tgz#786cb66304851fdba7a267b4a2840fe02a1088bd"
+  integrity sha512-+TkZZ3wS9/D8zCFqGeh0DXnd4Ava/YUKVHKOc1xbnSV1CC8j+mJ2AkQCSPy3pN59bJDQtZfNwthWzByCUz8uLQ==
   dependencies:
     tslib "^2.5.0"
 
