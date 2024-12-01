@@ -306,15 +306,6 @@
     vite "5.4.6"
     watchpack "2.4.1"
 
-"@angular/cdk@^17.0.0":
-  version "17.3.7"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-17.3.7.tgz#1d613214405ab61bba6ac2db715759e3a2c59951"
-  integrity sha512-aFEh8tzKFOwini6aNEp57S54Ocp9T7YIJfBVMESptu2TCPdMTlJ1HJTg5XS8NcQO+vwi9cFPGVwGF1frOx4LXA==
-  dependencies:
-    tslib "^2.3.0"
-  optionalDependencies:
-    parse5 "^7.1.2"
-
 "@angular/cli@^18.2.12":
   version "18.2.12"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-18.2.12.tgz#ea1af54d1fd172bf8bd3c7ed977a422c1c1a94d9"
@@ -422,21 +413,6 @@
   integrity sha512-VKmfgi/r/CkyBq9nChQ/ptmfu0JT/8ONnLVJ5H+SkFLRYJcIRyHLKjRihMCyVm6xM5yktOdCaW73NTQrFz7+bg==
   dependencies:
     tslib "^2.3.0"
-
-"@ant-design/colors@^7.0.0":
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/@ant-design/colors/-/colors-7.0.2.tgz#c5c753a467ce8d86ba7ca4736d2c01f599bb5492"
-  integrity sha512-7KJkhTiPiLHSu+LmMJnehfJ6242OCxSlR3xHVBecYxnMW8MS/878NXct1GqYARyL59fyeFdKRxXTfvR9SnDgJg==
-  dependencies:
-    "@ctrl/tinycolor" "^3.6.1"
-
-"@ant-design/icons-angular@^17.0.0":
-  version "17.0.0"
-  resolved "https://registry.yarnpkg.com/@ant-design/icons-angular/-/icons-angular-17.0.0.tgz#5e072f4be7fa0bcef1498be735de8b54ada23620"
-  integrity sha512-MNEh3UbkSl6gkdb5MQRNHEuWI1DnU1dME9zSymnWCipEXN7MB0mcYHSfyYTqKL1j45ftp6l1UnsLvhokRYyhXA==
-  dependencies:
-    "@ant-design/colors" "^7.0.0"
-    tslib "^2.0.0"
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.23.5", "@babel/code-frame@^7.24.2":
   version "7.24.2"
@@ -1576,7 +1552,7 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
-"@babel/runtime@^7.21.0", "@babel/runtime@^7.8.4":
+"@babel/runtime@^7.8.4":
   version "7.24.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.24.5.tgz#230946857c053a36ccc66e1dd03b17dd0c4ed02c"
   integrity sha512-Nms86NXrsaeU9vbBJKni6gXiEXZ4CVpYVzEjDH9Sb8vmZ3UljyA1GSOJl/6LGPO8EHLuSF9H+IxNXHPX8QHJ4g==
@@ -1656,11 +1632,6 @@
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.6.0.tgz#ec6cd237440700bc23ca23087f513c75508958b0"
   integrity sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==
-
-"@ctrl/tinycolor@^3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.6.1.tgz#b6c75a56a1947cc916ea058772d666a2c8932f31"
-  integrity sha512-SITSV6aIXsuVNV3f3O0f2n/cgyEDWoSqtZMYiAmcsYHydcKrOz3gUxB/iXd/Qf08+IZX4KpgNbvUdMBmWz+kcA==
 
 "@dabh/diagnostics@^2.0.2":
   version "2.0.3"
@@ -4250,13 +4221,6 @@ custom-event@~1.0.0:
   resolved "https://registry.yarnpkg.com/custom-event/-/custom-event-1.0.1.tgz#5d02a46850adf1b4a317946a3928fccb5bfd0425"
   integrity sha512-GAj5FOq0Hd+RsCGVJxZuKaIDXDf3h6GQoNEjFgbLLI/trgtavwUbSnZ5pVfg27DVCaWjIohryS0JFwIJyT2cMg==
 
-date-fns@^2.16.1:
-  version "2.30.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
-  integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
-  dependencies:
-    "@babel/runtime" "^7.21.0"
-
 date-format@^4.0.14:
   version "4.0.14"
   resolved "https://registry.yarnpkg.com/date-format/-/date-format-4.0.14.tgz#7a8e584434fb169a521c8b7aa481f355810d9400"
@@ -6384,16 +6348,6 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-ng-zorro-antd@17.4.0:
-  version "17.4.0"
-  resolved "https://registry.yarnpkg.com/ng-zorro-antd/-/ng-zorro-antd-17.4.0.tgz#d52888f92f07fc8f350ed71eb768db294442efe4"
-  integrity sha512-jlYfhIjWVwOJnwcvk27AuBnyzmXh8NA/OwdoU4AjfHN/8OBFnnoAsHQ7Qkh/IOgmshfvbNmeEjFgIdeSkX0vDg==
-  dependencies:
-    "@angular/cdk" "^17.0.0"
-    "@ant-design/icons-angular" "^17.0.0"
-    date-fns "^2.16.1"
-    tslib "^2.3.0"
-
 ngx-currency@^17.0.0:
   version "17.0.0"
   resolved "https://registry.yarnpkg.com/ngx-currency/-/ngx-currency-17.0.0.tgz#54093e878fffd93fbaf0775f4fd4ee6e2f9ab5ad"
@@ -6797,7 +6751,7 @@ parse5-sax-parser@^7.0.0:
   dependencies:
     parse5 "^7.0.0"
 
-parse5@^7.0.0, parse5@^7.1.2:
+parse5@^7.0.0:
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-7.1.2.tgz#0736bebbfd77793823240a23b7fc5e010b7f8e32"
   integrity sha512-Czj1WaSVpaoj0wbhMzLmWD69anp2WH7FXMB9n1Sy8/ZFF9jolSQVMu1Ij5WIyGmcBmhk7EOndpO4mIpihVqAXw==
