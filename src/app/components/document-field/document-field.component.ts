@@ -12,11 +12,12 @@ import { eDocumentType } from '@enums/document-type.enum';
 import { IOption } from '@interfaces/option.interface';
 
 @Component({
-    selector: 'app-document-field',
-    imports: [CommonModule, ReactiveFormsModule],
-    templateUrl: './document-field.component.html',
-    styleUrl: './document-field.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-document-field',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './document-field.component.html',
+  styleUrl: './document-field.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DocumentFieldComponent implements OnInit {
   @Input() label: string = 'Documento de identidad';

@@ -18,25 +18,24 @@ import { eNotificationType } from '@enums/notification-type.enum';
 import { eRoutes } from '@enums/routes.enum';
 import { ILogin, ILoginControls } from '@interfaces/index';
 import { AuthService } from '@services/auth.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
-    selector: 'app-login',
-    imports: [
-        CommonModule,
-        RouterModule,
-        ReactiveFormsModule,
-        ButtonComponent,
-        TextFieldComponent,
-    ],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.scss',
-    changeDetection: ChangeDetectionStrategy.Default
+  selector: 'app-login',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    ButtonComponent,
+    TextFieldComponent,
+  ],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
-  private notification = inject(NzNotificationService);
   private router = inject(Router);
 
   public form: FormGroup<ILoginControls>;
@@ -84,7 +83,7 @@ export class LoginComponent implements OnInit {
       })
       .catch((err: any) => {
         this.isLoading = false;
-        this.notification.create(eNotificationType.Error, 'Error', err.message);
+        // this.notification.create(eNotificationType.Error, 'Error', err.message);
       });
   }
 }
